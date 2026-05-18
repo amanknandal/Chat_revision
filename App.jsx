@@ -8,7 +8,7 @@ import Signup from "./components/pages/Signup"
 
 const App = () => {
   return (
-    <BrowserRouter basename="/Chat_revision">
+    <BrowserRouter basename="/Chat_revision/">
       <Routes>
         <Route path="/" element={<Dashboard />} />
         <Route path="/chat" element={<Chat />} />
