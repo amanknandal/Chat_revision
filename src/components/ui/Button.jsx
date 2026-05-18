@@ -1,0 +1,67 @@
+import { motion } from "framer-motion"
+
+const Button = ({
+  children,
+  icon: Icon,
+  variant = "primary",
+  fullWidth = false,
+  onClick,
+  type = "button",
+}) => {
+  const variants = {
+    primary: `
+      bg-gradient-to-r
+      from-purple-500
+      to-blue-500
+      text-white
+      hover:scale-[1.02]
+      shadow-lg
+    `,
+
+    secondary: `
+      bg-white/10
+      border
+      border-white/10
+      text-white
+      hover:bg-white/20
+    `,
+
+    danger: `
+      bg-red-500/20
+      border
+      border-red-400/20
+      text-red-400
+      hover:bg-red-500/30
+    `,
+  }
+
+  return (
+    <motion.button
+      whileTap={{ scale: 0.96 }}
+      type={type}
+      onClick={onClick}
+      className={`
+        flex
+        items-center
+        justify-center
+        gap-2
+        px-6
+        py-3
+        rounded-2xl
+        font-semibold
+        transition-all
+        duration-300
+
+        ${variants[variant]}
+
+        ${fullWidth ? "w-full" : ""}
+      `}
+    >
+      {Icon && <Icon className="w-5 h-5" />}
+
+      {children}
+    </motion.button>
+  )
+}
+
+export default Button
