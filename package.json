@@ -2,7 +2,7 @@
   "name": "chatpdf",
   "private": true,
   "version": "0.0.0",
-  "homepage":"https://amanknandal.github.io/Chat",
+  "homepage":"https://amanknandal.github.io/Chat_revision",
   "type": "module",
  "scripts": {
     "dev": "vite",
