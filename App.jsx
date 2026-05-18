@@ -16,6 +16,7 @@ const App = () => {
         <Route path="/pdf/:id" element={<PDFViewerPage />} />
         <Route path="/login" element={<Login />} />
         <Route path="/signup" element={<Signup />} />
+        <Route path="*" element={<Dashboard />} />
       </Routes>
     </BrowserRouter>
   )
