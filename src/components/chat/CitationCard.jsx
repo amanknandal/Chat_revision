@@ -4,11 +4,8 @@ import {
   Quote,
   ExternalLink,
 } from "lucide-react"
-
 const CitationCard = ({ citation }) => {
-
   const handleOpenSource = () => {
-
     if (citation.file_url) {
       window.open(
         citation.file_url,
@@ -16,7 +13,6 @@ const CitationCard = ({ citation }) => {
       )
     }
   }
-
   return (
     <motion.div
       whileHover={{ scale: 1.01 }}
@@ -32,9 +28,7 @@ const CitationCard = ({ citation }) => {
       "
     >
       <div className="flex items-start justify-between gap-4">
-
         <div className="flex items-start gap-3">
-
           <div
             className="
               w-12
@@ -51,20 +45,15 @@ const CitationCard = ({ citation }) => {
           >
             <FileText className="text-white w-6 h-6" />
           </div>
-
           <div>
-
             <h3 className="text-white font-semibold">
               {citation.source}
             </h3>
-
             <p className="text-gray-400 text-sm mt-1">
               Page {citation.page}
             </p>
-
           </div>
         </div>
-
         <button
           onClick={handleOpenSource}
           className="
@@ -78,7 +67,6 @@ const CitationCard = ({ citation }) => {
           <ExternalLink className="text-gray-300 w-5 h-5" />
         </button>
       </div>
-
       {citation.quote && (
         <div
           className="
@@ -91,18 +79,14 @@ const CitationCard = ({ citation }) => {
           "
         >
           <div className="flex items-start gap-3">
-
             <Quote className="text-purple-400 w-5 h-5 mt-1" />
-
             <p className="text-gray-300 text-sm leading-relaxed">
               “{citation.quote}”
             </p>
-
           </div>
         </div>
       )}
     </motion.div>
   )
 }
-
 export default CitationCard

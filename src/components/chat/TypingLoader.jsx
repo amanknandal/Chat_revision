@@ -1,6 +1,5 @@
 import { motion } from "framer-motion"
 import { Bot } from "lucide-react"
-
 const dotVariants = {
   animate: {
     y: [0, -6, 0],
@@ -10,12 +9,9 @@ const dotVariants = {
     },
   },
 }
-
 const TypingLoader = () => {
   return (
     <div className="flex items-start gap-4">
-      
-      {/* AVATAR */}
       <div
         className="
           w-12
@@ -32,8 +28,6 @@ const TypingLoader = () => {
       >
         <Bot className="text-white w-6 h-6" />
       </div>
-
-      {/* LOADER BOX */}
       <div
         className="
           px-5
@@ -58,7 +52,6 @@ const TypingLoader = () => {
               bg-purple-400
             "
           />
-
           <motion.div
             variants={dotVariants}
             animate="animate"
@@ -70,7 +63,6 @@ const TypingLoader = () => {
               bg-blue-400
             "
           />
-
           <motion.div
             variants={dotVariants}
             animate="animate"
@@ -87,5 +79,4 @@ const TypingLoader = () => {
     </div>
   )
 }
-
 export default TypingLoader

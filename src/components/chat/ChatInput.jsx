@@ -5,50 +5,34 @@ import {
   Paperclip,
   Mic,
 } from "lucide-react"
-
 import {
   uploadPDF,
   askQuestion,
 } from "../../services/api"
-
 const ChatInput = ({
   messages,
   setMessages,
   setTyping,
 }) => {
-
   const [message, setMessage] =
     useState("")
-
   const [uploading, setUploading] =
     useState(false)
-
   const fileInputRef = useRef(null)
-
   const handleUploadClick = () => {
-
     fileInputRef.current.click()
   }
-
   const handleFileUpload = async (e) => {
-
     const file = e.target.files[0]
-
     if (!file) return
-
     setUploading(true)
-
     try {
-
       const data = await uploadPDF(file)
-
       if (data.session_id) {
-
         localStorage.setItem(
           "session_id",
           data.session_id
         )
-
         setMessages((prev) => [
           ...prev,
           {
@@ -58,9 +42,7 @@ const ChatInput = ({
           }
         ])
       }
-
     } catch (err) {
-
       setMessages((prev) => [
         ...prev,
         {
@@ -70,19 +52,13 @@ const ChatInput = ({
         }
       ])
     }
-
     setUploading(false)
   }
-
   const handleSend = async () => {
-
     if (!message.trim()) return
-
     const sessionId =
       localStorage.getItem("session_id")
-
     if (!sessionId) {
-
       setMessages((prev) => [
         ...prev,
         {
@@ -91,34 +67,25 @@ const ChatInput = ({
           text: "Please upload a PDF first."
         }
       ])
-
       return
     }
-
     const userMessage = {
       id: Date.now(),
       sender: "user",
       text: message
     }
-
     setMessages((prev) => [
       ...prev,
       userMessage
     ])
-
     const currentQuestion = message
-
     setMessage("")
-
     setTyping(true)
-
     try {
-
       const data = await askQuestion(
         currentQuestion,
         sessionId
       )
-
       setMessages((prev) => [
         ...prev,
         {
@@ -130,9 +97,7 @@ const ChatInput = ({
           citation: data.citation
         }
       ])
-
     } catch (err) {
-
       setMessages((prev) => [
         ...prev,
         {
@@ -142,10 +107,8 @@ const ChatInput = ({
         }
       ])
     }
-
     setTyping(false)
   }
-
   return (
     <div
       className="
@@ -154,7 +117,6 @@ const ChatInput = ({
         gap-4
       "
     >
-
       <input
         type="file"
         accept=".pdf"
@@ -162,7 +124,6 @@ const ChatInput = ({
         ref={fileInputRef}
         onChange={handleFileUpload}
       />
-
       <button
         onClick={handleUploadClick}
         className="
@@ -176,7 +137,6 @@ const ChatInput = ({
       >
         <Paperclip className="text-white w-5 h-5" />
       </button>
-
       <div
         className="
           flex-1
@@ -192,7 +152,6 @@ const ChatInput = ({
           py-4
         "
       >
-
         <textarea
           rows={1}
           value={message}
@@ -226,9 +185,7 @@ const ChatInput = ({
         >
           <Mic className="text-gray-300 w-5 h-5" />
         </button>
-
       </div>
-
       <motion.button
         whileTap={{ scale: 0.9 }}
         onClick={handleSend}
@@ -250,5 +207,4 @@ const ChatInput = ({
     </div>
   )
 }
-
 export default ChatInput

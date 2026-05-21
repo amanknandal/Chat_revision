@@ -1,5 +1,4 @@
 import { motion } from "framer-motion"
-
 import {
   MessageSquareText,
   Brain,
@@ -8,7 +7,6 @@ import {
   Sparkles,
   GraduationCap,
 } from "lucide-react"
-
 const features = [
   {
     title: "AI Chat",
@@ -53,22 +51,17 @@ const features = [
     gradient: "from-violet-500 to-fuchsia-500",
   },
 ]
-
 const FeatureGrid = () => {
   return (
     <div>
-      {/* HEADER */}
       <div className="mb-8">
         <h2 className="text-3xl font-bold text-white">
           AI Features
         </h2>
-
         <p className="text-gray-400 mt-2">
           Supercharge your learning with AI-powered tools
         </p>
       </div>
-
-      {/* GRID */}
       <div
         className="
           grid
@@ -80,7 +73,6 @@ const FeatureGrid = () => {
       >
         {features.map((feature, index) => {
           const Icon = feature.icon
-
           return (
             <motion.div
               key={index}
@@ -102,7 +94,6 @@ const FeatureGrid = () => {
                 group
               "
             >
-              {/* GLOW */}
               <div
                 className={`
                   absolute
@@ -117,8 +108,6 @@ const FeatureGrid = () => {
                   ${feature.gradient}
                 `}
               />
-
-              {/* ICON */}
               <div
                 className={`
                   relative
@@ -136,19 +125,14 @@ const FeatureGrid = () => {
               >
                 <Icon className="text-white w-8 h-8" />
               </div>
-
-              {/* TEXT */}
               <div className="relative z-10 mt-6">
                 <h3 className="text-white text-xl font-bold">
                   {feature.title}
                 </h3>
-
                 <p className="text-gray-400 mt-3 leading-relaxed">
                   {feature.description}
                 </p>
               </div>
-
-              {/* BUTTON */}
               <button
                 className="
                   relative
@@ -174,5 +158,4 @@ const FeatureGrid = () => {
     </div>
   )
 }
-
 export default FeatureGrid
