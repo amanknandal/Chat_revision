@@ -1,0 +1,3404 @@
+"import { motion } from "framer-motion"
+import {
+  FileText,
+  MoreVertical,
+  Clock3,
+  Download,
+} from "lucide-react"
+
+const files = [
+  {
+    name: "DBMS Notes.pdf",
+    size: "4.2 MB",
+    time: "2 hours ago",
+  },
+  {
+    name: "Operating System.pdf",
+    size: "8.7 MB",
+    time: "5 hours ago",
+  },
+  {
+    name: "Computer Networks.pdf",
+    size: "6.1 MB",
+    time: "Yesterday",
+  },
+  {
+    name: "AI Research Paper.pdf",
+    size: "12.4 MB",
+    time: "2 days ago",
+  },
+]
+
+const RecentFiles = () => {
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: 30 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.4 }}
+      className="
+        bg-white/10
+        backdrop-blur-lg
+        border
+        border-white/10
+        rounded-3xl
+        p-6
+        shadow-xl
+      "
+    >
+      {/* HEADER */}
+      <div className="flex items-center justify-between mb-6">
+        <div>
+          <h2 className="text-white text-2xl font-bold">
+            Recent Files
+          </h2>
+
+          <p className="text-gray-400 text-sm mt-1">
+            Recently uploaded study materials
+          </p>
+        </div>
+
+        <button
+          className="
+            px-4
+            py-2
+            rounded-2xl
+            bg-white/10
+            text-white
+            hover:bg-white/20
+            transition-all
+            duration-300
+          "
+        >
+          View All
+        </button>
+      </div>
+
+      {/* FILE LIST */}
+      <div className="space-y-4">
+        {files.map((file, index) => (
+          <motion.div
+            key={index}
+            whileHover={{ scale: 1.01 }}
+            className="
+              flex
+              items-center
+              justify-between
+              gap-4
+              bg-white/5
+              border
+              border-white/10
+              rounded-2xl
+              p-4
+              hover:bg-white/10
+              transition-all
+              duration-300
+            "
+          >
+            {/* LEFT */}
+            <div className="flex items-center gap-4">
+              
+              {/* ICON */}
+              <div
+                className="
+                  w-14
+                  h-14
+                  rounded-2xl
+                  bg-gradient-to-r
+                  from-purple-500
+                  to-blue-500
+                  flex
+                  items-center
+                  justify-center
+                  shadow-lg
+                "
+              >
+                <FileText className="text-white w-7 h-7" />
+              </div>
+
+              {/* INFO */}
+              <div>
+                <h3 className="text-white font-semibold">
+                  {file.name}
+                </h3>
+
+                <div className="flex items-center gap-3 mt-1">
+                  <span className="text-gray-400 text-sm">
+                    {file.size}
+                  </span>
+
+                  <div className="w-1 h-1 bg-gray-500 rounded-full" />
+
+                  <div className="flex items-center gap-1 text-gray-400 text-sm">
+                    <Clock3 className="w-4 h-4" />
+
+                    {file.time}
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* RIGHT */}
+            <div className="flex items-center gap-2">
+              
+              <button
+                className="
+                  p-3
+                  rounded-xl
+                  bg-white/10
+                  hover:bg-white/20
+                  transition-all
+                  duration-300
+                "
+              >
+                <Download className="text-white w-5 h-5" />
+              </button>
+
+              <button
+                className="
+                  p-3
+                  rounded-xl
+                  bg-white/10
+                  hover:bg-white/20
+                  transition-all
+                  duration-300
+                "
+              >
+                <MoreVertical className="text-white w-5 h-5" />
+              </button>
+            </div>
+          </motion.div>
+        ))}
+      </div>
+    </motion.div>
+  )
+}
+
+export default RecentFiles", "import { motion } from "framer-motion"
+
+const StatsCard = ({
+  title,
+  value,
+  icon: Icon,
+  color,
+  increase,
+}) => {
+  return (
+    <motion.div
+      whileHover={{ y: -5 }}
+      transition={{ duration: 0.2 }}
+      className="
+        relative
+        overflow-hidden
+        bg-white/10
+        backdrop-blur-lg
+        border
+        border-white/10
+        rounded-3xl
+        p-6
+        shadow-xl
+      "
+    >
+      {/* GLOW */}
+      <div
+        className={`
+          absolute
+          -top-10
+          -right-10
+          w-32
+          h-32
+          rounded-full
+          blur-3xl
+          opacity-20
+          ${color}
+        `}
+      />
+
+      {/* CONTENT */}
+      <div className="relative z-10">
+        
+        {/* TOP */}
+        <div className="flex items-center justify-between">
+          <div
+            className={`
+              w-14
+              h-14
+              rounded-2xl
+              flex
+              items-center
+              justify-center
+              ${color}
+            `}
+          >
+            <Icon className="text-white w-7 h-7" />
+          </div>
+
+          <span
+            className="
+              px-3
+              py-1
+              rounded-xl
+              bg-green-500/20
+              text-green-400
+              text-sm
+              font-medium
+            "
+          >
+            +{increase}%
+          </span>
+        </div>
+
+        {/* TEXT */}
+        <div className="mt-6">
+          <h3 className="text-gray-400 text-sm font-medium">
+            {title}
+          </h3>
+
+          <h1 className="text-white text-4xl font-bold mt-2">
+            {value}
+          </h1>
+        </div>
+      </div>
+    </motion.div>
+  )
+}
+
+export default StatsCard", "import { motion } from "framer-motion"
+import { Sparkles } from "lucide-react"
+
+const WelcomeCard = () => {
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: 30 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.4 }}
+      className="
+        relative
+        overflow-hidden
+        rounded-3xl
+        bg-gradient-to-r
+        from-purple-600
+        via-blue-600
+        to-indigo-700
+        p-8
+        shadow-2xl
+      "
+    >
+      {/* BACKGROUND GLOW */}
+      <div
+        className="
+          absolute
+          -top-10
+          -right-10
+          w-40
+          h-40
+          bg-white/10
+          rounded-full
+          blur-3xl
+        "
+      />
+
+      {/* CONTENT */}
+      <div className="relative z-10 flex flex-col lg:flex-row lg:items-center lg:justify-between gap-8">
+        
+        {/* LEFT */}
+        <div>
+          <div
+            className="
+              inline-flex
+              items-center
+              gap-2
+              bg-white/10
+              px-4
+              py-2
+              rounded-2xl
+              mb-5
+            "
+          >
+            <Sparkles className="w-5 h-5 text-yellow-300" />
+
+            <span className="text-white text-sm font-medium">
+              AI Powered Learning
+            </span>
+          </div>
+
+          <h1
+            className="
+              text-3xl
+              md:text-5xl
+              font-bold
+              text-white
+              leading-tight
+            "
+          >
+            Learn Faster <br />
+            With AI Study Assistant
+          </h1>
+
+          <p
+            className="
+              text-white/80
+              mt-5
+              max-w-2xl
+              text-base
+              md:text-lg
+              leading-relaxed
+            "
+          >
+            Upload PDFs, generate smart notes, ask questions,
+            create flashcards, and prepare for exams with AI.
+          </p>
+
+          <div className="flex flex-wrap gap-4 mt-8">
+            <button
+              className="
+                px-6
+                py-3
+                rounded-2xl
+                bg-white
+                text-black
+                font-semibold
+                hover:scale-105
+                transition-all
+                duration-300
+                shadow-lg
+              "
+            >
+              Upload PDF
+            </button>
+
+            <button
+              className="
+                px-6
+                py-3
+                rounded-2xl
+                border
+                border-white/20
+                bg-white/10
+                text-white
+                font-semibold
+                hover:bg-white/20
+                transition-all
+                duration-300
+              "
+            >
+              Explore Features
+            </button>
+          </div>
+        </div>
+
+        {/* RIGHT CARD */}
+        <div
+          className="
+            w-full
+            lg:w-[320px]
+            bg-white/10
+            backdrop-blur-lg
+            border
+            border-white/10
+            rounded-3xl
+            p-6
+          "
+        >
+          <h3 className="text-white text-xl font-bold mb-6">
+            Today's Progress
+          </h3>
+
+          <div className="space-y-5">
+            {/* ITEM */}
+            <div>
+              <div className="flex items-center justify-between mb-2">
+                <span className="text-white/80 text-sm">
+                  PDFs Studied
+                </span>
+
+                <span className="text-white font-semibold">
+                  12
+                </span>
+              </div>
+
+              <div className="w-full h-3 bg-white/10 rounded-full overflow-hidden">
+                <div className="w-[70%] h-full bg-white rounded-full" />
+              </div>
+            </div>
+
+            {/* ITEM */}
+            <div>
+              <div className="flex items-center justify-between mb-2">
+                <span className="text-white/80 text-sm">
+                  Quiz Accuracy
+                </span>
+
+                <span className="text-white font-semibold">
+                  88%
+                </span>
+              </div>
+
+              <div className="w-full h-3 bg-white/10 rounded-full overflow-hidden">
+                <div className="w-[88%] h-full bg-green-400 rounded-full" />
+              </div>
+            </div>
+
+            {/* ITEM */}
+            <div>
+              <div className="flex items-center justify-between mb-2">
+                <span className="text-white/80 text-sm">
+                  Revision Goal
+                </span>
+
+                <span className="text-white font-semibold">
+                  60%
+                </span>
+              </div>
+
+              <div className="w-full h-3 bg-white/10 rounded-full overflow-hidden">
+                <div className="w-[60%] h-full bg-yellow-300 rounded-full" />
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </motion.div>
+  )
+}
+
+export default WelcomeCard", "import {
+  LayoutDashboard,
+  FileText,
+  MessageSquare,
+  Brain,
+  BookOpen,
+  Settings,
+  LogOut,
+  X,
+} from "lucide-react"
+
+import { motion, AnimatePresence } from "framer-motion"
+
+const menuItems = [
+  {
+    title: "Dashboard",
+    icon: LayoutDashboard,
+  },
+  {
+    title: "My PDFs",
+    icon: FileText,
+  },
+  {
+    title: "AI Chat",
+    icon: MessageSquare,
+  },
+  {
+    title: "Flashcards",
+    icon: Brain,
+  },
+  {
+    title: "Revision Notes",
+    icon: BookOpen,
+  },
+]
+
+const MobileSidebar = ({ isOpen, setIsOpen }) => {
+  return (
+    <AnimatePresence>
+      {isOpen && (
+        <>
+          {/* OVERLAY */}
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            onClick={() => setIsOpen(false)}
+            className="
+              fixed
+              inset-0
+              bg-black/50
+              backdrop-blur-sm
+              z-40
+              lg:hidden
+            "
+          />
+
+          {/* SIDEBAR */}
+          <motion.div
+            initial={{ x: -300 }}
+            animate={{ x: 0 }}
+            exit={{ x: -300 }}
+            transition={{ duration: 0.3 }}
+            className="
+              fixed
+              top-0
+              left-0
+              w-72
+              h-screen
+              bg-[#111827]
+              border-r
+              border-white/10
+              z-50
+              p-6
+              flex
+              flex-col
+              justify-between
+              lg:hidden
+            "
+          >
+            {/* TOP */}
+            <div>
+              {/* HEADER */}
+              <div className="flex items-center justify-between mb-10">
+                <div className="flex items-center gap-3">
+                  <div
+                    className="
+                      w-12
+                      h-12
+                      rounded-2xl
+                      bg-gradient-to-r
+                      from-purple-500
+                      to-blue-500
+                      flex
+                      items-center
+                      justify-center
+                      text-white
+                      font-bold
+                      text-xl
+                    "
+                  >
+                    AI
+                  </div>
+
+                  <div>
+                    <h1 className="text-white text-lg font-bold">
+                      Study Assistant
+                    </h1>
+
+                    <p className="text-gray-400 text-xs">
+                      Smart Learning
+                    </p>
+                  </div>
+                </div>
+
+                <button
+                  onClick={() => setIsOpen(false)}
+                  className="
+                    p-2
+                    rounded-xl
+                    hover:bg-white/10
+                    transition
+                  "
+                >
+                  <X className="text-white w-6 h-6" />
+                </button>
+              </div>
+
+              {/* MENU */}
+              <div className="space-y-3">
+                {menuItems.map((item, index) => {
+                  const Icon = item.icon
+
+                  return (
+                    <button
+                      key={index}
+                      className="
+                        w-full
+                        flex
+                        items-center
+                        gap-4
+                        px-4
+                        py-3
+                        rounded-2xl
+                        text-gray-300
+                        hover:text-white
+                        hover:bg-white/10
+                        transition-all
+                        duration-300
+                      "
+                    >
+                      <Icon className="w-5 h-5" />
+
+                      <span className="font-medium">
+                        {item.title}
+                      </span>
+                    </button>
+                  )
+                })}
+              </div>
+            </div>
+
+            {/* BOTTOM */}
+            <div className="space-y-3">
+              <button
+                className="
+                  w-full
+                  flex
+                  items-center
+                  gap-4
+                  px-4
+                  py-3
+                  rounded-2xl
+                  text-gray-300
+                  hover:text-white
+                  hover:bg-white/10
+                  transition-all
+                  duration-300
+                "
+              >
+                <Settings className="w-5 h-5" />
+
+                <span className="font-medium">
+                  Settings
+                </span>
+              </button>
+
+              <button
+                className="
+                  w-full
+                  flex
+                  items-center
+                  gap-4
+                  px-4
+                  py-3
+                  rounded-2xl
+                  text-red-400
+                  hover:bg-red-500/10
+                  transition-all
+                  duration-300
+                "
+              >
+                <LogOut className="w-5 h-5" />
+
+                <span className="font-medium">
+                  Logout
+                </span>
+              </button>
+            </div>
+          </motion.div>
+        </>
+      )}
+    </AnimatePresence>
+  )
+}
+
+export default MobileSidebar", "import { Menu, Bell, Search } from "lucide-react"
+import { motion } from "framer-motion"
+
+const Navbar = ({ toggleSidebar }) => {
+  return (
+    <motion.nav
+      initial={{ y: -40, opacity: 0 }}
+      animate={{ y: 0, opacity: 1 }}
+      transition={{ duration: 0.4 }}
+      className="
+        w-full
+        h-16
+        px-6
+        flex
+        items-center
+        justify-between
+        bg-white/10
+        backdrop-blur-lg
+        border-b
+        border-white/10
+        sticky
+        top-0
+        z-50
+      "
+    >
+      {/* LEFT */}
+      <div className="flex items-center gap-4">
+        
+        {/* Mobile Menu Button */}
+        <button
+          onClick={toggleSidebar}
+          className="
+            lg:hidden
+            p-2
+            rounded-xl
+            hover:bg-white/10
+            transition
+          "
+        >
+          <Menu className="text-white w-6 h-6" />
+        </button>
+
+        {/* Logo */}
+        <div className="flex items-center gap-2">
+          <div
+            className="
+              w-10
+              h-10
+              rounded-2xl
+              bg-gradient-to-r
+              from-purple-500
+              to-blue-500
+              flex
+              items-center
+              justify-center
+              font-bold
+              text-white
+              text-lg
+              shadow-lg
+            "
+          >
+            AI
+          </div>
+
+          <div>
+            <h1 className="text-white font-bold text-lg">
+              Study Assistant
+            </h1>
+
+            <p className="text-gray-400 text-xs">
+              AI PDF Learning Platform
+            </p>
+          </div>
+        </div>
+      </div>
+
+      {/* CENTER SEARCH */}
+      <div className="hidden md:flex items-center w-[40%]">
+        <div
+          className="
+            flex
+            items-center
+            w-full
+            bg-white/10
+            border
+            border-white/10
+            rounded-2xl
+            px-4
+            py-2
+          "
+        >
+          <Search className="text-gray-400 w-5 h-5" />
+
+          <input
+            type="text"
+            placeholder="Search PDFs, notes, quizzes..."
+            className="
+              bg-transparent
+              outline-none
+              text-white
+              px-3
+              w-full
+              placeholder:text-gray-400
+            "
+          />
+        </div>
+      </div>
+
+      {/* RIGHT */}
+      <div className="flex items-center gap-4">
+
+        {/* Notifications */}
+        <button
+          className="
+            relative
+            p-2
+            rounded-xl
+            hover:bg-white/10
+            transition
+          "
+        >
+          <Bell className="text-white w-6 h-6" />
+
+          <span
+            className="
+              absolute
+              top-1
+              right-1
+              w-2
+              h-2
+              bg-red-500
+              rounded-full
+            "
+          />
+        </button>
+
+        {/* User Profile */}
+        <div
+          className="
+            flex
+            items-center
+            gap-3
+            bg-white/10
+            border
+            border-white/10
+            px-3
+            py-2
+            rounded-2xl
+          "
+        >
+          <img
+            src="https://i.pravatar.cc/100"
+            alt="profile"
+            className="
+              w-10
+              h-10
+              rounded-full
+              object-cover
+            "
+          />
+
+          <div className="hidden sm:block">
+            <h3 className="text-white text-sm font-semibold">
+              Raja bhai
+            </h3>
+
+            <p className="text-gray-400 text-xs">
+              Student
+            </p>
+          </div>
+        </div>
+      </div>
+    </motion.nav>
+  )
+}
+
+export default Navbar", "import {
+  LayoutDashboard,
+  FileText,
+  MessageSquare,
+  Brain,
+  BookOpen,
+  Settings,
+  LogOut,
+} from "lucide-react"
+
+import { motion } from "framer-motion"
+
+const menuItems = [
+  {
+    title: "Dashboard",
+    icon: LayoutDashboard,
+  },
+  {
+    title: "My PDFs",
+    icon: FileText,
+  },
+  {
+    title: "AI Chat",
+    icon: MessageSquare,
+  },
+  {
+    title: "Flashcards",
+    icon: Brain,
+  },
+  {
+    title: "Revision Notes",
+    icon: BookOpen,
+  },
+]
+
+const Sidebar = () => {
+  return (
+    <motion.aside
+      initial={{ x: -80, opacity: 0 }}
+      animate={{ x: 0, opacity: 1 }}
+      transition={{ duration: 0.4 }}
+      className="
+        hidden
+        lg:flex
+        flex-col
+        justify-between
+        w-72
+        min-h-screen
+        bg-white/10
+        backdrop-blur-lg
+        border-r
+        border-white/10
+        p-6
+      "
+    >
+      {/* TOP */}
+      <div>
+        {/* LOGO */}
+        <div className="flex items-center gap-3 mb-10">
+          <div
+            className="
+              w-12
+              h-12
+              rounded-2xl
+              bg-gradient-to-r
+              from-purple-500
+              to-blue-500
+              flex
+              items-center
+              justify-center
+              text-white
+              font-bold
+              text-xl
+              shadow-lg
+            "
+          >
+            AI
+          </div>
+
+          <div>
+            <h1 className="text-white text-lg font-bold">
+              Study Assistant
+            </h1>
+
+            <p className="text-gray-400 text-xs">
+              Smart Learning Platform
+            </p>
+          </div>
+        </div>
+
+        {/* MENU */}
+        <div className="space-y-3">
+          {menuItems.map((item, index) => {
+            const Icon = item.icon
+
+            return (
+              <button
+                key={index}
+                className="
+                  w-full
+                  flex
+                  items-center
+                  gap-4
+                  px-4
+                  py-3
+                  rounded-2xl
+                  text-gray-300
+                  hover:text-white
+                  hover:bg-white/10
+                  transition-all
+                  duration-300
+                  group
+                "
+              >
+                <Icon className="w-5 h-5" />
+
+                <span className="font-medium">
+                  {item.title}
+                </span>
+              </button>
+            )
+          })}
+        </div>
+      </div>
+
+      {/* BOTTOM */}
+      <div className="space-y-3">
+        <button
+          className="
+            w-full
+            flex
+            items-center
+            gap-4
+            px-4
+            py-3
+            rounded-2xl
+            text-gray-300
+            hover:text-white
+            hover:bg-white/10
+            transition-all
+            duration-300
+          "
+        >
+          <Settings className="w-5 h-5" />
+
+          <span className="font-medium">
+            Settings
+          </span>
+        </button>
+
+        <button
+          className="
+            w-full
+            flex
+            items-center
+            gap-4
+            px-4
+            py-3
+            rounded-2xl
+            text-red-400
+            hover:bg-red-500/10
+            transition-all
+            duration-300
+          "
+        >
+          <LogOut className="w-5 h-5" />
+
+          <span className="font-medium">
+            Logout
+          </span>
+        </button>
+      </div>
+    </motion.aside>
+  )
+}
+
+export default Sidebar", "import { useState } from "react"
+import { motion } from "framer-motion"
+
+import {
+  Brain,
+  RotateCcw,
+  ChevronLeft,
+  ChevronRight,
+} from "lucide-react"
+
+const Flashcard = () => {
+  const [flipped, setFlipped] = useState(false)
+
+  return (
+    <div className="w-full max-w-2xl mx-auto">
+      
+      {/* HEADER */}
+      <div className="flex items-center justify-between mb-6">
+        
+        <div>
+          <h2 className="text-3xl font-bold text-white">
+            AI Flashcards
+          </h2>
+
+          <p className="text-gray-400 mt-2">
+            Learn faster with smart revision cards
+          </p>
+        </div>
+
+        <div
+          className="
+            flex
+            items-center
+            gap-2
+            px-4
+            py-2
+            rounded-2xl
+            bg-purple-500/20
+            text-purple-300
+            text-sm
+            font-medium
+          "
+        >
+          <Brain className="w-4 h-4" />
+
+          Card 1 / 10
+        </div>
+      </div>
+
+      {/* CARD */}
+      <div
+        className="relative h-[350px] perspective-1000"
+        onClick={() => setFlipped(!flipped)}
+      >
+        <motion.div
+          animate={{ rotateY: flipped ? 180 : 0 }}
+          transition={{ duration: 0.6 }}
+          className="
+            relative
+            w-full
+            h-full
+            cursor-pointer
+            preserve-3d
+          "
+        >
+          {/* FRONT */}
+          <div
+            className="
+              absolute
+              inset-0
+              backface-hidden
+              bg-white/10
+              backdrop-blur-lg
+              border
+              border-white/10
+              rounded-3xl
+              p-10
+              shadow-2xl
+              flex
+              flex-col
+              justify-center
+              items-center
+              text-center
+            "
+          >
+            <div
+              className="
+                w-20
+                h-20
+                rounded-3xl
+                bg-gradient-to-r
+                from-purple-500
+                to-blue-500
+                flex
+                items-center
+                justify-center
+                shadow-lg
+                mb-8
+              "
+            >
+              <Brain className="text-white w-10 h-10" />
+            </div>
+
+            <h2 className="text-white text-3xl font-bold">
+              What is Normalization?
+            </h2>
+
+            <p className="text-gray-400 mt-5 text-lg">
+              Click to reveal the answer
+            </p>
+          </div>
+
+          {/* BACK */}
+          <div
+            className="
+              absolute
+              inset-0
+              rotate-y-180
+              backface-hidden
+              bg-gradient-to-r
+              from-purple-500
+              to-blue-500
+              rounded-3xl
+              p-10
+              shadow-2xl
+              flex
+              flex-col
+              justify-center
+              items-center
+              text-center
+            "
+          >
+            <h2 className="text-white text-2xl font-bold">
+              Answer
+            </h2>
+
+            <p className="text-white/90 mt-6 text-lg leading-relaxed">
+              Normalization is the process of organizing data
+              in a database to reduce redundancy and improve
+              data integrity.
+            </p>
+
+            <button
+              className="
+                mt-8
+                flex
+                items-center
+                gap-2
+                px-5
+                py-3
+                rounded-2xl
+                bg-white/20
+                hover:bg-white/30
+                transition-all
+                duration-300
+                text-white
+                font-medium
+              "
+            >
+              <RotateCcw className="w-5 h-5" />
+
+              Flip Again
+            </button>
+          </div>
+        </motion.div>
+      </div>
+
+      {/* CONTROLS */}
+      <div className="flex items-center justify-center gap-5 mt-8">
+        
+        <button
+          className="
+            p-4
+            rounded-2xl
+            bg-white/10
+            hover:bg-white/20
+            transition-all
+            duration-300
+          "
+        >
+          <ChevronLeft className="text-white w-6 h-6" />
+        </button>
+
+        <button
+          className="
+            px-6
+            py-3
+            rounded-2xl
+            bg-gradient-to-r
+            from-purple-500
+            to-blue-500
+            text-white
+            font-semibold
+            shadow-lg
+          "
+        >
+          Mark as Learned
+        </button>
+
+        <button
+          className="
+            p-4
+            rounded-2xl
+            bg-white/10
+            hover:bg-white/20
+            transition-all
+            duration-300
+          "
+        >
+          <ChevronRight className="text-white w-6 h-6" />
+        </button>
+      </div>
+    </div>
+  )
+}
+
+export default Flashcard", "import { useState } from "react"
+import { motion } from "framer-motion"
+
+import {
+  GraduationCap,
+  CheckCircle2,
+  XCircle,
+} from "lucide-react"
+
+const QuizCard = () => {
+  const [selected, setSelected] = useState(null)
+
+  const options = [
+    "Reducing data redundancy",
+    "Increasing duplicate data",
+    "Removing primary keys",
+    "Creating random tables",
+  ]
+
+  const correctAnswer = 0
+
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: 25 }}
+      animate={{ opacity: 1, y: 0 }}
+      className="
+        relative
+        overflow-hidden
+        bg-white/10
+        backdrop-blur-lg
+        border
+        border-white/10
+        rounded-3xl
+        p-8
+        shadow-2xl
+        max-w-3xl
+        mx-auto
+      "
+    >
+      {/* GLOW */}
+      <div
+        className="
+          absolute
+          -top-10
+          -right-10
+          w-40
+          h-40
+          rounded-full
+          bg-blue-500/20
+          blur-3xl
+        "
+      />
+
+      {/* HEADER */}
+      <div className="relative z-10 flex items-center gap-4 mb-8">
+        
+        <div
+          className="
+            w-16
+            h-16
+            rounded-2xl
+            bg-gradient-to-r
+            from-purple-500
+            to-blue-500
+            flex
+            items-center
+            justify-center
+            shadow-lg
+          "
+        >
+          <GraduationCap className="text-white w-8 h-8" />
+        </div>
+
+        <div>
+          <h2 className="text-white text-2xl font-bold">
+            AI Quiz
+          </h2>
+
+          <p className="text-gray-400 mt-1">
+            Question 1 of 10
+          </p>
+        </div>
+      </div>
+
+      {/* QUESTION */}
+      <div className="relative z-10">
+        <h3 className="text-white text-2xl font-semibold leading-relaxed">
+          What is the primary purpose of normalization in DBMS?
+        </h3>
+
+        {/* OPTIONS */}
+        <div className="space-y-4 mt-8">
+          {options.map((option, index) => {
+            const isCorrect = index === correctAnswer
+            const isSelected = selected === index
+
+            return (
+              <button
+                key={index}
+                onClick={() => setSelected(index)}
+                className={`
+                  w-full
+                  flex
+                  items-center
+                  justify-between
+                  p-5
+                  rounded-2xl
+                  border
+                  transition-all
+                  duration-300
+                  text-left
+
+                  ${
+                    isSelected
+                      ? isCorrect
+                        ? `
+                          bg-green-500/20
+                          border-green-400/40
+                        `
+                        : `
+                          bg-red-500/20
+                          border-red-400/40
+                        `
+                      : `
+                          bg-white/5
+                          border-white/10
+                          hover:bg-white/10
+                        `
+                  }
+                `}
+              >
+                <span className="text-white text-lg">
+                  {option}
+                </span>
+
+                {isSelected &&
+                  (isCorrect ? (
+                    <CheckCircle2 className="text-green-400 w-6 h-6" />
+                  ) : (
+                    <XCircle className="text-red-400 w-6 h-6" />
+                  ))}
+              </button>
+            )
+          })}
+        </div>
+      </div>
+
+      {/* FOOTER */}
+      <div className="relative z-10 flex items-center justify-between mt-10">
+        
+        <div
+          className="
+            px-4
+            py-2
+            rounded-2xl
+            bg-purple-500/20
+            text-purple-300
+            text-sm
+            font-medium
+          "
+        >
+          Difficulty: Medium
+        </div>
+
+        <button
+          className="
+            px-6
+            py-3
+            rounded-2xl
+            bg-gradient-to-r
+            from-purple-500
+            to-blue-500
+            text-white
+            font-semibold
+            hover:scale-105
+            transition-all
+            duration-300
+            shadow-lg
+          "
+        >
+          Next Question
+        </button>
+      </div>
+    </motion.div>
+  )
+}
+
+export default QuizCard", "import { motion } from "framer-motion"
+
+import {
+  BookOpen,
+  Download,
+  Copy,
+  Sparkles,
+} from "lucide-react"
+
+const RevisionNotes = () => {
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: 25 }}
+      animate={{ opacity: 1, y: 0 }}
+      className="
+        relative
+        overflow-hidden
+        bg-white/10
+        backdrop-blur-lg
+        border
+        border-white/10
+        rounded-3xl
+        p-8
+        shadow-2xl
+      "
+    >
+      {/* GLOW */}
+      <div
+        className="
+          absolute
+          -top-10
+          -right-10
+          w-40
+          h-40
+          rounded-full
+          bg-yellow-500/20
+          blur-3xl
+        "
+      />
+
+      {/* HEADER */}
+      <div className="relative z-10 flex items-start justify-between gap-6">
+        
+        <div className="flex items-center gap-4">
+          
+          <div
+            className="
+              w-16
+              h-16
+              rounded-2xl
+              bg-gradient-to-r
+              from-orange-500
+              to-yellow-500
+              flex
+              items-center
+              justify-center
+              shadow-lg
+            "
+          >
+            <BookOpen className="text-white w-8 h-8" />
+          </div>
+
+          <div>
+            <h1 className="text-white text-3xl font-bold">
+              Revision Notes
+            </h1>
+
+            <p className="text-gray-400 mt-2">
+              AI-generated exam preparation notes
+            </p>
+          </div>
+        </div>
+
+        <div
+          className="
+            flex
+            items-center
+            gap-2
+            px-4
+            py-2
+            rounded-2xl
+            bg-yellow-500/20
+            text-yellow-300
+            text-sm
+            font-medium
+          "
+        >
+          <Sparkles className="w-4 h-4" />
+
+          Night Before Exam Mode
+        </div>
+      </div>
+
+      {/* NOTES */}
+      <div
+        className="
+          relative
+          z-10
+          mt-8
+          bg-white/5
+          border
+          border-white/10
+          rounded-3xl
+          p-6
+          space-y-6
+        "
+      >
+        {/* TOPIC */}
+        <div>
+          <h2 className="text-white text-xl font-bold">
+            1. Normalization
+          </h2>
+
+          <ul className="mt-3 space-y-2 text-gray-300 leading-relaxed">
+            <li>• Reduces data redundancy</li>
+            <li>• Improves data integrity</li>
+            <li>• Uses normal forms like 1NF, 2NF, 3NF</li>
+            <li>• Helps organize relational databases efficiently</li>
+          </ul>
+        </div>
+
+        {/* TOPIC */}
+        <div>
+          <h2 className="text-white text-xl font-bold">
+            2. Primary Key
+          </h2>
+
+          <ul className="mt-3 space-y-2 text-gray-300 leading-relaxed">
+            <li>• Unique identifier for table records</li>
+            <li>• Cannot contain NULL values</li>
+            <li>• Ensures entity integrity</li>
+          </ul>
+        </div>
+
+        {/* TOPIC */}
+        <div>
+          <h2 className="text-white text-xl font-bold">
+            3. Foreign Key
+          </h2>
+
+          <ul className="mt-3 space-y-2 text-gray-300 leading-relaxed">
+            <li>• Creates relationship between tables</li>
+            <li>• References primary key of another table</li>
+            <li>• Maintains referential integrity</li>
+          </ul>
+        </div>
+      </div>
+
+      {/* ACTIONS */}
+      <div className="relative z-10 flex items-center gap-4 mt-8">
+        
+        <button
+          className="
+            flex
+            items-center
+            gap-2
+            px-6
+            py-3
+            rounded-2xl
+            bg-gradient-to-r
+            from-orange-500
+            to-yellow-500
+            text-white
+            font-semibold
+            hover:scale-105
+            transition-all
+            duration-300
+            shadow-lg
+          "
+        >
+          <Download className="w-5 h-5" />
+
+          Export Notes
+        </button>
+
+        <button
+          className="
+            flex
+            items-center
+            gap-2
+            px-6
+            py-3
+            rounded-2xl
+            bg-white/10
+            border
+            border-white/10
+            text-white
+            hover:bg-white/20
+            transition-all
+            duration-300
+          "
+        >
+          <Copy className="w-5 h-5" />
+
+          Copy
+        </button>
+      </div>
+    </motion.div>
+  )
+}
+
+export default RevisionNotes", "import { motion } from "framer-motion"
+
+import {
+  FileText,
+  Sparkles,
+  Download,
+  Copy,
+} from "lucide-react"
+
+const SummaryCard = () => {
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: 25 }}
+      animate={{ opacity: 1, y: 0 }}
+      whileHover={{ y: -5 }}
+      transition={{ duration: 0.3 }}
+      className="
+        relative
+        overflow-hidden
+        bg-white/10
+        backdrop-blur-lg
+        border
+        border-white/10
+        rounded-3xl
+        p-6
+        shadow-2xl
+      "
+    >
+      {/* GLOW */}
+      <div
+        className="
+          absolute
+          -top-10
+          -right-10
+          w-40
+          h-40
+          rounded-full
+          bg-purple-500/20
+          blur-3xl
+        "
+      />
+
+      {/* HEADER */}
+      <div className="relative z-10 flex items-start justify-between">
+        
+        <div className="flex items-center gap-4">
+          
+          <div
+            className="
+              w-16
+              h-16
+              rounded-2xl
+              bg-gradient-to-r
+              from-purple-500
+              to-blue-500
+              flex
+              items-center
+              justify-center
+              shadow-lg
+            "
+          >
+            <FileText className="text-white w-8 h-8" />
+          </div>
+
+          <div>
+            <h2 className="text-white text-2xl font-bold">
+              AI Summary
+            </h2>
+
+            <p className="text-gray-400 mt-1">
+              Generated from DBMS Notes.pdf
+            </p>
+          </div>
+        </div>
+
+        <div
+          className="
+            flex
+            items-center
+            gap-2
+            px-4
+            py-2
+            rounded-2xl
+            bg-purple-500/20
+            text-purple-300
+            text-sm
+            font-medium
+          "
+        >
+          <Sparkles className="w-4 h-4" />
+
+          AI Generated
+        </div>
+      </div>
+
+      {/* CONTENT */}
+      <div
+        className="
+          relative
+          z-10
+          mt-8
+          bg-white/5
+          border
+          border-white/10
+          rounded-2xl
+          p-5
+        "
+      >
+        <p className="text-gray-300 leading-relaxed">
+          Database normalization is a structured process used
+          to organize data efficiently within relational
+          databases. It minimizes redundancy, improves data
+          consistency, and ensures integrity through multiple
+          normal forms such as 1NF, 2NF, and 3NF.
+        </p>
+
+        <p className="text-gray-300 leading-relaxed mt-4">
+          The primary goal is to eliminate duplicate data and
+          create relationships between tables using keys.
+          Proper normalization enhances scalability,
+          maintenance, and query performance in database
+          systems.
+        </p>
+      </div>
+
+      {/* ACTIONS */}
+      <div className="relative z-10 flex items-center gap-4 mt-6">
+        
+        <button
+          className="
+            flex
+            items-center
+            gap-2
+            px-5
+            py-3
+            rounded-2xl
+            bg-gradient-to-r
+            from-purple-500
+            to-blue-500
+            text-white
+            font-medium
+            hover:scale-105
+            transition-all
+            duration-300
+            shadow-lg
+          "
+        >
+          <Download className="w-5 h-5" />
+
+          Export
+        </button>
+
+        <button
+          className="
+            flex
+            items-center
+            gap-2
+            px-5
+            py-3
+            rounded-2xl
+            bg-white/10
+            border
+            border-white/10
+            text-white
+            hover:bg-white/20
+            transition-all
+            duration-300
+          "
+        >
+          <Copy className="w-5 h-5" />
+
+          Copy
+        </button>
+      </div>
+    </motion.div>
+  )
+}
+
+export default SummaryCard", "import Navbar from "../layout/Navbar"
+import Sidebar from "../layout/Sidebar"
+import ChatBox from "../chat/ChatBox"
+
+const Chat = () => {
+  return (
+    <div className="flex bg-[#0B1120] min-h-screen">
+      
+      {/* SIDEBAR */}
+      <Sidebar />
+
+      {/* MAIN */}
+      <div className="flex-1 flex flex-col">
+        
+        <Navbar />
+
+        <div className="flex-1 p-6">
+          <ChatBox />
+        </div>
+
+      </div>
+    </div>
+  )
+}
+
+export default Chat", "import Navbar from "../layout/Navbar"
+import Sidebar from "../layout/Sidebar"
+import WelcomeCard from "../dashboard/WelcomeCard"
+import StatsCard from "../dashboard/StatsCard"
+import FeatureGrid from "../dashboard/FeatureGrid"
+
+import {
+  FileText,
+  Brain,
+  MessageSquareText,
+  Sparkles,
+} from "lucide-react"
+
+const Dashboard = () => {
+  return (
+    <div className="flex bg-[#0B1120] min-h-screen">
+      
+      {/* SIDEBAR */}
+      <Sidebar />
+
+      {/* MAIN */}
+      <div className="flex-1">
+        <Navbar />
+
+        <div className="p-6 space-y-8">
+          
+          {/* WELCOME */}
+          <WelcomeCard />
+
+          {/* STATS */}
+          <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-6">
+            <StatsCard
+              title="PDFs Uploaded"
+              value="24"
+              icon={FileText}
+              color="bg-purple-500"
+              increase="12"
+            />
+
+            <StatsCard
+              title="AI Chats"
+              value="148"
+              icon={MessageSquareText}
+              color="bg-blue-500"
+              increase="18"
+            />
+
+            <StatsCard
+              title="Flashcards"
+              value="320"
+              icon={Brain}
+              color="bg-pink-500"
+              increase="22"
+            />
+
+            <StatsCard
+              title="AI Insights"
+              value="89"
+              icon={Sparkles}
+              color="bg-yellow-500"
+              increase="9"
+            />
+          </div>
+
+          {/* FEATURES */}
+          <FeatureGrid />
+        </div>
+      </div>
+    </div>
+  )
+}
+
+export default Dashboard", "import { useState } from "react"
+import { motion } from "framer-motion"
+
+import { Mail, Lock } from "lucide-react"
+import Input from "../ui/Input"
+import Button from "../ui/Button"
+
+const Login = () => {
+  const [email, setEmail] = useState("")
+  const [password, setPassword] = useState("")
+
+  const handleLogin = () => {
+    console.log({ email, password })
+  }
+
+  return (
+    <div className="min-h-screen flex items-center justify-center bg-[#0B1120] p-6">
+      
+      <motion.div
+        initial={{ opacity: 0, scale: 0.95 }}
+        animate={{ opacity: 1, scale: 1 }}
+        className="
+          w-full
+          max-w-md
+          bg-white/10
+          backdrop-blur-lg
+          border
+          border-white/10
+          rounded-3xl
+          p-8
+          shadow-2xl
+        "
+      >
+        {/* TITLE */}
+        <h1 className="text-white text-3xl font-bold text-center">
+          Welcome Back
+        </h1>
+
+        <p className="text-gray-400 text-center mt-2">
+          Login to continue your AI learning journey
+        </p>
+
+        {/* FORM */}
+        <div className="mt-8 space-y-5">
+          
+          <Input
+            icon={Mail}
+            label="Email"
+            placeholder="Enter your email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+          />
+
+          <Input
+            icon={Lock}
+            label="Password"
+            type="password"
+            placeholder="Enter your password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+          />
+
+          <Button fullWidth onClick={handleLogin}>
+            Login
+          </Button>
+        </div>
+
+        {/* FOOTER */}
+        <p className="text-gray-400 text-center mt-6 text-sm">
+          Don’t have an account?{" "}
+          <span className="text-purple-400 cursor-pointer">
+            Sign up
+          </span>
+        </p>
+      </motion.div>
+    </div>
+  )
+}
+
+export default Login", "import Navbar from "../layout/Navbar"
+import Sidebar from "../layout/Sidebar"
+import PDFViewer from "../pdf/PDFViewer"
+import ChatBox from "../chat/ChatBox"
+
+const PDFViewerPage = () => {
+  return (
+    <div className="flex bg-[#0B1120] min-h-screen">
+      
+      {/* SIDEBAR */}
+      <Sidebar />
+
+      {/* MAIN */}
+      <div className="flex-1 flex flex-col">
+        
+        <Navbar />
+
+        <div className="flex-1 p-6 grid grid-cols-1 xl:grid-cols-3 gap-6">
+          
+          {/* PDF VIEWER */}
+          <div className="xl:col-span-2">
+            <PDFViewer />
+          </div>
+
+          {/* AI CHAT */}
+          <div className="xl:col-span-1">
+            <ChatBox />
+          </div>
+
+        </div>
+      </div>
+    </div>
+  )
+}
+
+export default PDFViewerPage" part one of the frontend code wait i am going to give you part 2 bec of limit i am sending it in 2 pars 
+"import { useState } from "react"
+import { motion } from "framer-motion"
+
+import { Mail, Lock, User } from "lucide-react"
+import Input from "../ui/Input"
+import Button from "../ui/Button"
+
+const Signup = () => {
+  const [name, setName] = useState("")
+  const [email, setEmail] = useState("")
+  const [password, setPassword] = useState("")
+
+  const handleSignup = () => {
+    console.log({ name, email, password })
+  }
+
+  return (
+    <div className="min-h-screen flex items-center justify-center bg-[#0B1120] p-6">
+      
+      <motion.div
+        initial={{ opacity: 0, scale: 0.95 }}
+        animate={{ opacity: 1, scale: 1 }}
+        className="
+          w-full
+          max-w-md
+          bg-white/10
+          backdrop-blur-lg
+          border
+          border-white/10
+          rounded-3xl
+          p-8
+          shadow-2xl
+        "
+      >
+        {/* TITLE */}
+        <h1 className="text-white text-3xl font-bold text-center">
+          Create Account
+        </h1>
+
+        <p className="text-gray-400 text-center mt-2">
+          Start your AI-powered learning journey
+        </p>
+
+        {/* FORM */}
+        <div className="mt-8 space-y-5">
+          
+          <Input
+            icon={User}
+            label="Full Name"
+            placeholder="Enter your name"
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+          />
+
+          <Input
+            icon={Mail}
+            label="Email"
+            placeholder="Enter your email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+          />
+
+          <Input
+            icon={Lock}
+            label="Password"
+            type="password"
+            placeholder="Create a password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+          />
+
+          <Button fullWidth onClick={handleSignup}>
+            Sign Up
+          </Button>
+        </div>
+
+        {/* FOOTER */}
+        <p className="text-gray-400 text-center mt-6 text-sm">
+          Already have an account?{" "}
+          <span className="text-purple-400 cursor-pointer">
+            Login
+          </span>
+        </p>
+      </motion.div>
+    </div>
+  )
+}
+
+export default Signup", "import Navbar from "../layout/Navbar"
+import Sidebar from "../layout/Sidebar"
+import UploadBox from "../pdf/UploadBox"
+import PDFList from "../pdf/PDFList"
+
+const Upload = () => {
+  return (
+    <div className="flex bg-[#0B1120] min-h-screen">
+      
+      {/* SIDEBAR */}
+      <Sidebar />
+
+      {/* MAIN */}
+      <div className="flex-1">
+        
+        <Navbar />
+
+        <div className="p-6 space-y-10">
+          
+          {/* UPLOAD */}
+          <UploadBox />
+
+          {/* LIST */}
+          <PDFList />
+
+        </div>
+      </div>
+    </div>
+  )
+}
+
+export default Upload", "import { motion } from "framer-motion"
+
+import {
+  FileText,
+  CalendarDays,
+  MoreVertical,
+  Trash2,
+  Eye,
+  MessageSquare,
+} from "lucide-react"
+
+const PDFCard = ({ pdf }) => {
+  return (
+    <motion.div
+      whileHover={{ y: -6 }}
+      transition={{ duration: 0.2 }}
+      className="
+        relative
+        overflow-hidden
+        bg-white/10
+        backdrop-blur-lg
+        border
+        border-white/10
+        rounded-3xl
+        p-6
+        shadow-xl
+        hover:border-white/20
+        transition-all
+        duration-300
+      "
+    >
+      {/* GLOW */}
+      <div
+        className="
+          absolute
+          -top-10
+          -right-10
+          w-36
+          h-36
+          rounded-full
+          bg-purple-500/20
+          blur-3xl
+        "
+      />
+
+      {/* TOP */}
+      <div className="relative z-10 flex items-start justify-between">
+        
+        {/* ICON */}
+        <div
+          className="
+            w-16
+            h-16
+            rounded-2xl
+            bg-gradient-to-r
+            from-purple-500
+            to-blue-500
+            flex
+            items-center
+            justify-center
+            shadow-lg
+          "
+        >
+          <FileText className="text-white w-8 h-8" />
+        </div>
+
+        {/* MENU */}
+        <button
+          className="
+            p-2
+            rounded-xl
+            hover:bg-white/10
+            transition
+          "
+        >
+          <MoreVertical className="text-white w-5 h-5" />
+        </button>
+      </div>
+
+      {/* INFO */}
+      <div className="relative z-10 mt-6">
+        <h2 className="text-white text-xl font-bold line-clamp-1">
+          {pdf.name}
+        </h2>
+
+        <div className="flex items-center gap-2 mt-3 text-gray-400 text-sm">
+          <CalendarDays className="w-4 h-4" />
+
+          <span>{pdf.date}</span>
+        </div>
+
+        <div className="flex items-center gap-3 mt-4">
+          <span
+            className="
+              px-3
+              py-1
+              rounded-xl
+              bg-white/10
+              text-gray-300
+              text-sm
+            "
+          >
+            {pdf.size}
+          </span>
+
+          <span
+            className="
+              px-3
+              py-1
+              rounded-xl
+              bg-green-500/20
+              text-green-400
+              text-sm
+            "
+          >
+            Processed
+          </span>
+        </div>
+      </div>
+
+      {/* ACTIONS */}
+      <div className="relative z-10 flex items-center gap-3 mt-8">
+        
+        <button
+          className="
+            flex-1
+            flex
+            items-center
+            justify-center
+            gap-2
+            py-3
+            rounded-2xl
+            bg-gradient-to-r
+            from-purple-500
+            to-blue-500
+            text-white
+            font-medium
+            hover:scale-[1.02]
+            transition-all
+            duration-300
+          "
+        >
+          <MessageSquare className="w-5 h-5" />
+
+          Chat
+        </button>
+
+        <button
+          className="
+            p-3
+            rounded-2xl
+            bg-white/10
+            hover:bg-white/20
+            transition-all
+            duration-300
+          "
+        >
+          <Eye className="text-white w-5 h-5" />
+        </button>
+
+        <button
+          className="
+            p-3
+            rounded-2xl
+            bg-red-500/10
+            hover:bg-red-500/20
+            transition-all
+            duration-300
+          "
+        >
+          <Trash2 className="text-red-400 w-5 h-5" />
+        </button>
+      </div>
+    </motion.div>
+  )
+}
+
+export default PDFCard" , "import PDFCard from "./PDFCard"
+
+const pdfs = [
+  {
+    id: 1,
+    name: "DBMS Complete Notes.pdf",
+    size: "4.2 MB",
+    date: "12 May 2026",
+  },
+  {
+    id: 2,
+    name: "Operating System Guide.pdf",
+    size: "8.5 MB",
+    date: "14 May 2026",
+  },
+  {
+    id: 3,
+    name: "Computer Networks.pdf",
+    size: "6.7 MB",
+    date: "15 May 2026",
+  },
+  {
+    id: 4,
+    name: "AI Research Paper.pdf",
+    size: "11.2 MB",
+    date: "16 May 2026",
+  },
+]
+
+const PDFList = () => {
+  return (
+    <div>
+      {/* HEADER */}
+      <div className="flex items-center justify-between mb-8">
+        <div>
+          <h1 className="text-3xl font-bold text-white">
+            Your PDFs
+          </h1>
+
+          <p className="text-gray-400 mt-2">
+            Manage and chat with your uploaded documents
+          </p>
+        </div>
+
+        <button
+          className="
+            px-6
+            py-3
+            rounded-2xl
+            bg-gradient-to-r
+            from-purple-500
+            to-blue-500
+            text-white
+            font-semibold
+            hover:scale-105
+            transition-all
+            duration-300
+            shadow-lg
+          "
+        >
+          Upload New
+        </button>
+      </div>
+
+      {/* GRID */}
+      <div
+        className="
+          grid
+          grid-cols-1
+          md:grid-cols-2
+          xl:grid-cols-3
+          gap-6
+        "
+      >
+        {pdfs.map((pdf) => (
+          <PDFCard key={pdf.id} pdf={pdf} />
+        ))}
+      </div>
+    </div>
+  )
+}
+
+export default PDFList", "import { motion } from "framer-motion"
+import {
+  ChevronLeft,
+  ChevronRight,
+  ZoomIn,
+  ZoomOut,
+  Download,
+} from "lucide-react"
+
+const PDFViewer = () => {
+  return (
+    <motion.div
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      className="
+        bg-white/10
+        backdrop-blur-lg
+        border
+        border-white/10
+        rounded-3xl
+        overflow-hidden
+        shadow-2xl
+      "
+    >
+      {/* TOPBAR */}
+      <div
+        className="
+          flex
+          items-center
+          justify-between
+          px-6
+          py-4
+          border-b
+          border-white/10
+          bg-white/5
+        "
+      >
+        {/* FILE INFO */}
+        <div>
+          <h2 className="text-white font-bold text-lg">
+            DBMS Complete Notes.pdf
+          </h2>
+
+          <p className="text-gray-400 text-sm mt-1">
+            Page 1 of 120
+          </p>
+        </div>
+
+        {/* ACTIONS */}
+        <div className="flex items-center gap-3">
+          
+          <button
+            className="
+              p-3
+              rounded-2xl
+              bg-white/10
+              hover:bg-white/20
+              transition-all
+              duration-300
+            "
+          >
+            <ZoomOut className="text-white w-5 h-5" />
+          </button>
+
+          <button
+            className="
+              p-3
+              rounded-2xl
+              bg-white/10
+              hover:bg-white/20
+              transition-all
+              duration-300
+            "
+          >
+            <ZoomIn className="text-white w-5 h-5" />
+          </button>
+
+          <button
+            className="
+              p-3
+              rounded-2xl
+              bg-white/10
+              hover:bg-white/20
+              transition-all
+              duration-300
+            "
+          >
+            <Download className="text-white w-5 h-5" />
+          </button>
+        </div>
+      </div>
+
+      {/* PDF CONTENT */}
+      <div
+        className="
+          relative
+          flex
+          items-center
+          justify-center
+          bg-[#0B1120]
+          min-h-[700px]
+          p-8
+        "
+      >
+        {/* PREVIOUS BUTTON */}
+        <button
+          className="
+            absolute
+            left-6
+            top-1/2
+            -translate-y-1/2
+            p-4
+            rounded-full
+            bg-white/10
+            hover:bg-white/20
+            transition-all
+            duration-300
+            z-10
+          "
+        >
+          <ChevronLeft className="text-white w-6 h-6" />
+        </button>
+
+        {/* PDF PAGE */}
+        <motion.div
+          whileHover={{ scale: 1.01 }}
+          className="
+            w-full
+            max-w-4xl
+            bg-white
+            rounded-2xl
+            shadow-2xl
+            min-h-[600px]
+            p-10
+            overflow-hidden
+          "
+        >
+          {/* MOCK PDF CONTENT */}
+          <div className="space-y-6">
+            <div className="h-8 w-2/3 bg-gray-300 rounded-lg" />
+
+            <div className="space-y-3">
+              <div className="h-4 bg-gray-200 rounded-lg w-full" />
+              <div className="h-4 bg-gray-200 rounded-lg w-[95%]" />
+              <div className="h-4 bg-gray-200 rounded-lg w-[90%]" />
+              <div className="h-4 bg-gray-200 rounded-lg w-[85%]" />
+            </div>
+
+            <div className="space-y-3 mt-10">
+              <div className="h-4 bg-gray-200 rounded-lg w-full" />
+              <div className="h-4 bg-gray-200 rounded-lg w-[92%]" />
+              <div className="h-4 bg-gray-200 rounded-lg w-[88%]" />
+              <div className="h-4 bg-gray-200 rounded-lg w-[94%]" />
+            </div>
+
+            <div
+              className="
+                mt-10
+                h-60
+                rounded-2xl
+                bg-gray-200
+              "
+            />
+
+            <div className="space-y-3 mt-10">
+              <div className="h-4 bg-gray-200 rounded-lg w-full" />
+              <div className="h-4 bg-gray-200 rounded-lg w-[93%]" />
+              <div className="h-4 bg-gray-200 rounded-lg w-[87%]" />
+            </div>
+          </div>
+        </motion.div>
+
+        {/* NEXT BUTTON */}
+        <button
+          className="
+            absolute
+            right-6
+            top-1/2
+            -translate-y-1/2
+            p-4
+            rounded-full
+            bg-white/10
+            hover:bg-white/20
+            transition-all
+            duration-300
+            z-10
+          "
+        >
+          <ChevronRight className="text-white w-6 h-6" />
+        </button>
+      </div>
+    </motion.div>
+  )
+}
+
+export default PDFViewer", "import { motion } from "framer-motion"
+import { UploadCloud, FileText } from "lucide-react"
+import { useRef, useState } from "react"
+
+const UploadBox = () => {
+  const fileInputRef = useRef(null)
+  const [fileName, setFileName] = useState("")
+
+  const handleFileChange = (e) => {
+    const file = e.target.files[0]
+
+    if (file) {
+      setFileName(file.name)
+    }
+  }
+
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: 30 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.4 }}
+      className="
+        relative
+        overflow-hidden
+        bg-white/10
+        backdrop-blur-lg
+        border
+        border-dashed
+        border-white/20
+        rounded-3xl
+        p-10
+        text-center
+        shadow-xl
+      "
+    >
+      {/* GLOW */}
+      <div
+        className="
+          absolute
+          -top-10
+          -right-10
+          w-40
+          h-40
+          rounded-full
+          bg-purple-500/20
+          blur-3xl
+        "
+      />
+
+      {/* CONTENT */}
+      <div className="relative z-10">
+        
+        {/* ICON */}
+        <div
+          className="
+            mx-auto
+            w-24
+            h-24
+            rounded-3xl
+            bg-gradient-to-r
+            from-purple-500
+            to-blue-500
+            flex
+            items-center
+            justify-center
+            shadow-2xl
+          "
+        >
+          <UploadCloud className="text-white w-12 h-12" />
+        </div>
+
+        {/* TEXT */}
+        <h2 className="text-white text-3xl font-bold mt-6">
+          Upload Your PDF
+        </h2>
+
+        <p className="text-gray-400 mt-3 max-w-lg mx-auto">
+          Drag and drop your study materials or click below
+          to upload PDFs for AI-powered learning.
+        </p>
+
+        {/* BUTTON */}
+        <button
+          onClick={() => fileInputRef.current.click()}
+          className="
+            mt-8
+            px-8
+            py-4
+            rounded-2xl
+            bg-gradient-to-r
+            from-purple-500
+            to-blue-500
+            text-white
+            font-semibold
+            hover:scale-105
+            transition-all
+            duration-300
+            shadow-lg
+          "
+        >
+          Choose PDF
+        </button>
+
+        {/* INPUT */}
+        <input
+          type="file"
+          accept=".pdf"
+          ref={fileInputRef}
+          onChange={handleFileChange}
+          className="hidden"
+        />
+
+        {/* FILE PREVIEW */}
+        {fileName && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            className="
+              mt-8
+              flex
+              items-center
+              justify-center
+              gap-4
+              bg-white/10
+              border
+              border-white/10
+              rounded-2xl
+              px-5
+              py-4
+              max-w-md
+              mx-auto
+            "
+          >
+            <div
+              className="
+                w-14
+                h-14
+                rounded-2xl
+                bg-gradient-to-r
+                from-purple-500
+                to-blue-500
+                flex
+                items-center
+                justify-center
+              "
+            >
+              <FileText className="text-white w-7 h-7" />
+            </div>
+
+            <div className="text-left">
+              <h3 className="text-white font-semibold">
+                {fileName}
+              </h3>
+
+              <p className="text-gray-400 text-sm">
+                Ready for AI processing
+              </p>
+            </div>
+          </motion.div>
+        )}
+      </div>
+    </motion.div>
+  )
+}
+export default UploadBox", "import { motion } from "framer-motion"
+
+const Button = ({
+  children,
+  icon: Icon,
+  variant = "primary",
+  fullWidth = false,
+  onClick,
+  type = "button",
+}) => {
+  const variants = {
+    primary: `
+      bg-gradient-to-r
+      from-purple-500
+      to-blue-500
+      text-white
+      hover:scale-[1.02]
+      shadow-lg
+    `,
+
+    secondary: `
+      bg-white/10
+      border
+      border-white/10
+      text-white
+      hover:bg-white/20
+    `,
+
+    danger: `
+      bg-red-500/20
+      border
+      border-red-400/20
+      text-red-400
+      hover:bg-red-500/30
+    `,
+  }
+
+  return (
+    <motion.button
+      whileTap={{ scale: 0.96 }}
+      type={type}
+      onClick={onClick}
+      className={`
+        flex
+        items-center
+        justify-center
+        gap-2
+        px-6
+        py-3
+        rounded-2xl
+        font-semibold
+        transition-all
+        duration-300
+
+        ${variants[variant]}
+
+        ${fullWidth ? "w-full" : ""}
+      `}
+    >
+      {Icon && <Icon className="w-5 h-5" />}
+
+      {children}
+    </motion.button>
+  )
+}
+
+export default Button", "import { motion } from "framer-motion"
+
+const EmptyState = ({
+  icon: Icon,
+  title,
+  description,
+  buttonText,
+  onClick,
+}) => {
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: 25 }}
+      animate={{ opacity: 1, y: 0 }}
+      className="
+        flex
+        flex-col
+        items-center
+        justify-center
+        text-center
+        py-20
+        px-6
+      "
+    >
+      {/* ICON */}
+      <div
+        className="
+          w-28
+          h-28
+          rounded-3xl
+          bg-gradient-to-r
+          from-purple-500
+          to-blue-500
+          flex
+          items-center
+          justify-center
+          shadow-2xl
+        "
+      >
+        {Icon && (
+          <Icon className="text-white w-14 h-14" />
+        )}
+      </div>
+
+      {/* TITLE */}
+      <h2 className="text-white text-3xl font-bold mt-8">
+        {title}
+      </h2>
+
+      {/* DESCRIPTION */}
+      <p
+        className="
+          text-gray-400
+          mt-4
+          max-w-lg
+          leading-relaxed
+          text-lg
+        "
+      >
+        {description}
+      </p>
+
+      {/* BUTTON */}
+      {buttonText && (
+        <button
+          onClick={onClick}
+          className="
+            mt-8
+            px-8
+            py-4
+            rounded-2xl
+            bg-gradient-to-r
+            from-purple-500
+            to-blue-500
+            text-white
+            font-semibold
+            hover:scale-105
+            transition-all
+            duration-300
+            shadow-xl
+          "
+        >
+          {buttonText}
+        </button>
+      )}
+    </motion.div>
+  )
+}
+
+export default EmptyState", "import { motion } from "framer-motion"
+
+const Input = ({
+  icon: Icon,
+  type = "text",
+  placeholder,
+  value,
+  onChange,
+  label,
+}) => {
+  return (
+    <div className="w-full">
+      {label && (
+        <label className="block text-sm text-gray-300 mb-2">
+          {label}
+        </label>
+      )}
+
+      {/* INPUT CONTAINER */}
+      <motion.div
+        whileFocus={{ scale: 1.01 }}
+        className="
+          flex
+          items-center
+          gap-3
+          bg-white/10
+          backdrop-blur-lg
+          border
+          border-white/10
+          rounded-2xl
+          px-4
+          py-3
+          focus-within:border-purple-400/40
+          transition-all
+          duration-300
+        "
+      >
+        {Icon && (
+          <Icon className="text-gray-400 w-5 h-5" />
+        )}
+
+        <input
+          type={type}
+          placeholder={placeholder}
+          value={value}
+          onChange={onChange}
+          className="
+            w-full
+            bg-transparent
+            outline-none
+            text-white
+            placeholder:text-gray-400
+          "
+        />
+      </motion.div>
+    </div>
+  )
+}
+
+export default Input", "import { motion } from "framer-motion"
+
+const Loader = () => {
+  return (
+    <div className="flex items-center justify-center py-10">
+      
+      <div className="relative w-20 h-20">
+        
+        {/* OUTER RING */}
+        <motion.div
+          animate={{ rotate: 360 }}
+          transition={{
+            duration: 2,
+            repeat: Infinity,
+            ease: "linear",
+          }}
+          className="
+            absolute
+            inset-0
+            rounded-full
+            border-4
+            border-purple-500
+            border-t-transparent
+          "
+        />
+
+        {/* INNER RING */}
+        <motion.div
+          animate={{ rotate: -360 }}
+          transition={{
+            duration: 1.5,
+            repeat: Infinity,
+            ease: "linear",
+          }}
+          className="
+            absolute
+            inset-3
+            rounded-full
+            border-4
+            border-blue-500
+            border-b-transparent
+          "
+        />
+
+        {/* CENTER DOT */}
+        <div
+          className="
+            absolute
+            inset-[34%]
+            rounded-full
+            bg-white
+            shadow-lg
+          "
+        />
+      </div>
+    </div>
+  )
+}
+
+export default Loader", "import { motion, AnimatePresence } from "framer-motion"
+
+import { X } from "lucide-react"
+
+const Modal = ({
+  isOpen,
+  onClose,
+  title,
+  children,
+}) => {
+  return (
+    <AnimatePresence>
+      {isOpen && (
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          className="
+            fixed
+            inset-0
+            z-50
+            flex
+            items-center
+            justify-center
+            bg-black/60
+            backdrop-blur-sm
+            p-4
+          "
+        >
+          {/* MODAL */}
+          <motion.div
+            initial={{ scale: 0.9, opacity: 0 }}
+            animate={{ scale: 1, opacity: 1 }}
+            exit={{ scale: 0.9, opacity: 0 }}
+            transition={{ duration: 0.2 }}
+            className="
+              relative
+              w-full
+              max-w-2xl
+              bg-[#0F172A]
+              border
+              border-white/10
+              rounded-3xl
+              shadow-2xl
+              overflow-hidden
+            "
+          >
+            {/* HEADER */}
+            <div
+              className="
+                flex
+                items-center
+                justify-between
+                px-6
+                py-5
+                border-b
+                border-white/10
+                bg-white/5
+              "
+            >
+              <h2 className="text-white text-2xl font-bold">
+                {title}
+              </h2>
+
+              <button
+                onClick={onClose}
+                className="
+                  p-2
+                  rounded-xl
+                  hover:bg-white/10
+                  transition-all
+                  duration-300
+                "
+              >
+                <X className="text-white w-5 h-5" />
+              </button>
+            </div>
+
+            {/* BODY */}
+            <div className="p-6">
+              {children}
+            </div>
+          </motion.div>
+        </motion.div>
+      )}
+    </AnimatePresence>
+  )
+}
+
+export default Modal", "import { Search, X } from "lucide-react"
+import { motion } from "framer-motion"
+
+const SearchBar = ({
+  value,
+  onChange,
+  placeholder = "Search...",
+  onClear,
+}) => {
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: 15 }}
+      animate={{ opacity: 1, y: 0 }}
+      className="
+        flex
+        items-center
+        gap-3
+        w-full
+        bg-white/10
+        backdrop-blur-lg
+        border
+        border-white/10
+        rounded-2xl
+        px-5
+        py-4
+        focus-within:border-purple-400/40
+        transition-all
+        duration-300
+      "
+    >
+      {/* SEARCH ICON */}
+      <Search className="text-gray-400 w-5 h-5" />
+
+      {/* INPUT */}
+      <input
+        type="text"
+        value={value}
+        onChange={onChange}
+        placeholder={placeholder}
+        className="
+          flex-1
+          bg-transparent
+          outline-none
+          text-white
+          placeholder:text-gray-400
+        "
+      />
+
+      {/* CLEAR */}
+      {value && (
+        <button
+          onClick={onClear}
+          className="
+            p-1
+            rounded-lg
+            hover:bg-white/10
+            transition-all
+            duration-300
+          "
+        >
+          <X className="text-gray-400 w-4 h-4" />
+        </button>
+      )}
+    </motion.div>
+  )
+}
+
+export default SearchBar", "import { useState } from "react"
+import { motion } from "framer-motion"
+
+import {
+  Moon,
+  Sun,
+} from "lucide-react"
+
+const ThemeToggle = () => {
+  const [darkMode, setDarkMode] = useState(true)
+
+  return (
+    <motion.button
+      whileTap={{ scale: 0.9 }}
+      onClick={() => setDarkMode(!darkMode)}
+      className="
+        relative
+        flex
+        items-center
+        w-20
+        h-11
+        px-1
+        rounded-full
+        bg-white/10
+        border
+        border-white/10
+        backdrop-blur-lg
+      "
+    >
+      {/* TOGGLE BALL */}
+      <motion.div
+        animate={{
+          x: darkMode ? 36 : 0,
+        }}
+        transition={{
+          type: "spring",
+          stiffness: 300,
+          damping: 20,
+        }}
+        className="
+          absolute
+          w-9
+          h-9
+          rounded-full
+          bg-gradient-to-r
+          from-purple-500
+          to-blue-500
+          shadow-lg
+        "
+      />
+
+      {/* ICONS */}
+      <div className="relative z-10 flex items-center justify-between w-full px-1">
+        
+        <Sun className="text-yellow-300 w-5 h-5" />
+
+        <Moon className="text-white w-5 h-5" />
+      </div>
+    </motion.button>
+  )
+}
+
+export default ThemeToggle", "import { motion, AnimatePresence } from "framer-motion"
+
+import {
+  CheckCircle2,
+  AlertCircle,
+  Info,
+  X,
+} from "lucide-react"
+
+const Toast = ({
+  show,
+  type = "success",
+  title,
+  message,
+  onClose,
+}) => {
+  const icons = {
+    success: CheckCircle2,
+    error: AlertCircle,
+    info: Info,
+  }
+
+  const styles = {
+    success: `
+      border-green-400/20
+      bg-green-500/10
+    `,
+    error: `
+      border-red-400/20
+      bg-red-500/10
+    `,
+    info: `
+      border-blue-400/20
+      bg-blue-500/10
+    `,
+  }
+
+  const iconColors = {
+    success: "text-green-400",
+    error: "text-red-400",
+    info: "text-blue-400",
+  }
+
+  const Icon = icons[type]
+
+  return (
+    <AnimatePresence>
+      {show && (
+        <motion.div
+          initial={{ opacity: 0, y: -30 }}
+          animate={{ opacity: 1, y: 0 }}
+          exit={{ opacity: 0, y: -30 }}
+          transition={{ duration: 0.25 }}
+          className="
+            fixed
+            top-6
+            right-6
+            z-50
+            w-full
+            max-w-md
+          "
+        >
+          <div
+            className={`
+              flex
+              items-start
+              gap-4
+              backdrop-blur-xl
+              border
+              rounded-3xl
+              p-5
+              shadow-2xl
+              ${styles[type]}
+            `}
+          >
+            {/* ICON */}
+            <div
+              className="
+                w-12
+                h-12
+                rounded-2xl
+                bg-white/10
+                flex
+                items-center
+                justify-center
+              "
+            >
+              <Icon
+                className={`
+                  w-6
+                  h-6
+                  ${iconColors[type]}
+                `}
+              />
+            </div>
+
+            {/* TEXT */}
+            <div className="flex-1">
+              <h3 className="text-white font-bold text-lg">
+                {title}
+              </h3>
+
+              <p className="text-gray-300 mt-1 text-sm leading-relaxed">
+                {message}
+              </p>
+            </div>
+
+            {/* CLOSE */}
+            <button
+              onClick={onClose}
+              className="
+                p-2
+                rounded-xl
+                hover:bg-white/10
+                transition-all
+                duration-300
+              "
+            >
+              <X className="text-gray-300 w-5 h-5" />
+            </button>
+          </div>
+        </motion.div>
+      )}
+    </AnimatePresence>
+  )
+}
+
+export default Toast", "import { BrowserRouter, Routes, Route } from "react-router-dom"
+import Dashboard from "./components/pages/Dashboard"
+import Chat from "./components/pages/Chat"
+import Upload from "./components/pages/Upload"
+import PDFViewerPage from "./components/pages/PDFViewerPage"
+import Login from "./components/pages/Login"
+import Signup from "./components/pages/Signup"
+
+const App = () => {
+  return (
+    <BrowserRouter basename="/Chat_revision/">
+      <Routes>
+        <Route path="/" element={<Dashboard />} />
+        <Route path="/chat" element={<Chat />} />
+        <Route path="/upload" element={<Upload />} />
+        <Route path="/pdf/:id" element={<PDFViewerPage />} />
+        <Route path="/login" element={<Login />} />
+        <Route path="/signup" element={<Signup />} />
+        <Route path="*" element={<Dashboard />} />
+      </Routes>
+    </BrowserRouter>
+  )
+}
+
+export default App" don't give me extra space or comments in code 

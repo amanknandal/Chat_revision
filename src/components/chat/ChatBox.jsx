@@ -1,25 +1,17 @@
+import { useState } from "react"
 import { motion } from "framer-motion"
 import ChatMessage from "./ChatMessage"
 import ChatInput from "./ChatInput"
-
-const messages = [
-  {
-    id: 1,
-    sender: "user",
-    text: "Explain normalization in DBMS in simple words.",
-  },
-  {
-    id: 2,
-    sender: "ai",
-    text: "Normalization is the process of organizing data in a database to reduce redundancy and improve data integrity.",
-    citation: {
-      page: 24,
-      source: "DBMS Complete Notes.pdf",
-    },
-  },
-]
-
+import TypingLoader from "./TypingLoader"
 const ChatBox = () => {
+  const [messages, setMessages] = useState([
+    {
+      id: 1,
+      sender: "ai",
+      text: "Upload a PDF and start asking questions."
+    }
+  ])
+  const [typing, setTyping] = useState(false)
   return (
     <motion.div
       initial={{ opacity: 0 }}
@@ -37,7 +29,6 @@ const ChatBox = () => {
         shadow-2xl
       "
     >
-      {/* HEADER */}
       <div
         className="
           flex
@@ -54,12 +45,10 @@ const ChatBox = () => {
           <h2 className="text-white text-2xl font-bold">
             AI PDF Chat
           </h2>
-
           <p className="text-gray-400 text-sm mt-1">
             Ask questions from your uploaded documents
           </p>
         </div>
-
         <div
           className="
             px-4
@@ -74,8 +63,6 @@ const ChatBox = () => {
           AI Online
         </div>
       </div>
-
-      {/* CHAT AREA */}
       <div
         className="
           flex-1
@@ -86,16 +73,21 @@ const ChatBox = () => {
         "
       >
         {messages.map((message) => (
-          <ChatMessage key={message.id} message={message} />
+          <ChatMessage
+            key={message.id}
+            message={message}
+          />
         ))}
+        {typing && <TypingLoader />}
       </div>
-
-      {/* INPUT */}
       <div className="p-5 border-t border-white/10 bg-white/5">
-        <ChatInput />
+        <ChatInput
+          messages={messages}
+          setMessages={setMessages}
+          setTyping={setTyping}
+        />
       </div>
     </motion.div>
   )
 }
-
 export default ChatBox

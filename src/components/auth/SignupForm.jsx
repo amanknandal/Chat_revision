@@ -7,12 +7,64 @@ import {
   Eye,
   EyeOff,
 } from "lucide-react"
-
+import { signupUser } from "../../services/api"
+import { useNavigate } from "react-router-dom"
 const SignupForm = () => {
-  const [showPassword, setShowPassword] = useState(false)
-  const [showConfirmPassword, setShowConfirmPassword] =
+  const navigate = useNavigate()
+  const [showPassword, setShowPassword] =
     useState(false)
-
+  const [
+    showConfirmPassword,
+    setShowConfirmPassword,
+  ] = useState(false)
+  const [username, setUsername] =
+    useState("")
+  const [email, setEmail] =
+    useState("")
+  const [password, setPassword] =
+    useState("")
+  const [
+    confirmPassword,
+    setConfirmPassword,
+  ] = useState("")
+  const [loading, setLoading] =
+    useState(false)
+  const [error, setError] =
+    useState("")
+  const handleSignup = async (e) => {
+    e.preventDefault()
+    if (password !== confirmPassword) {
+      setError("Passwords do not match")
+      return
+    }
+    setLoading(true)
+    setError("")
+    try {
+      const data = await signupUser({
+        username,
+        email,
+        password
+      })
+      if (data.token) {
+        localStorage.setItem(
+          "token",
+          data.token
+        )
+        localStorage.setItem(
+          "user",
+          JSON.stringify(data.user)
+        )
+        navigate("/dashboard")
+      } else {
+        setError(
+          data.error || "Signup failed"
+        )
+      }
+    } catch (err) {
+      setError("Server error")
+    }
+    setLoading(false)
+  }
   return (
     <motion.div
       initial={{ opacity: 0, y: 40 }}
@@ -30,25 +82,23 @@ const SignupForm = () => {
         shadow-2xl
       "
     >
-      {/* HEADER */}
       <div className="mb-8 text-center">
+
         <h1 className="text-3xl font-bold text-white">
           Create Account
         </h1>
-
         <p className="text-gray-400 mt-2">
           Start your AI learning journey
         </p>
       </div>
-
-      {/* FORM */}
-      <form className="space-y-5">
-        {/* NAME */}
+      <form
+        className="space-y-5"
+        onSubmit={handleSignup}
+      >
         <div>
           <label className="text-sm text-gray-300 mb-2 block">
             Full Name
           </label>
-
           <div
             className="
               flex
@@ -62,9 +112,12 @@ const SignupForm = () => {
             "
           >
             <User className="text-gray-400 w-5 h-5" />
-
             <input
               type="text"
+              value={username}
+              onChange={(e) =>
+                setUsername(e.target.value)
+              }
               placeholder="Enter your full name"
               className="
                 bg-transparent
@@ -77,13 +130,10 @@ const SignupForm = () => {
             />
           </div>
         </div>
-
-        {/* EMAIL */}
         <div>
           <label className="text-sm text-gray-300 mb-2 block">
             Email
           </label>
-
           <div
             className="
               flex
@@ -97,9 +147,12 @@ const SignupForm = () => {
             "
           >
             <Mail className="text-gray-400 w-5 h-5" />
-
             <input
               type="email"
+              value={email}
+              onChange={(e) =>
+                setEmail(e.target.value)
+              }
               placeholder="Enter your email"
               className="
                 bg-transparent
@@ -112,13 +165,10 @@ const SignupForm = () => {
             />
           </div>
         </div>
-
-        {/* PASSWORD */}
         <div>
           <label className="text-sm text-gray-300 mb-2 block">
             Password
           </label>
-
           <div
             className="
               flex
@@ -132,9 +182,16 @@ const SignupForm = () => {
             "
           >
             <Lock className="text-gray-400 w-5 h-5" />
-
             <input
-              type={showPassword ? "text" : "password"}
+              type={
+                showPassword
+                  ? "text"
+                  : "password"
+              }
+              value={password}
+              onChange={(e) =>
+                setPassword(e.target.value)
+              }
               placeholder="Create password"
               className="
                 bg-transparent
@@ -148,7 +205,11 @@ const SignupForm = () => {
 
             <button
               type="button"
-              onClick={() => setShowPassword(!showPassword)}
+              onClick={() =>
+                setShowPassword(
+                  !showPassword
+                )
+              }
             >
               {showPassword ? (
                 <EyeOff className="text-gray-400 w-5 h-5" />
@@ -158,13 +219,10 @@ const SignupForm = () => {
             </button>
           </div>
         </div>
-
-        {/* CONFIRM PASSWORD */}
         <div>
           <label className="text-sm text-gray-300 mb-2 block">
             Confirm Password
           </label>
-
           <div
             className="
               flex
@@ -178,10 +236,17 @@ const SignupForm = () => {
             "
           >
             <Lock className="text-gray-400 w-5 h-5" />
-
             <input
               type={
-                showConfirmPassword ? "text" : "password"
+                showConfirmPassword
+                  ? "text"
+                  : "password"
+              }
+              value={confirmPassword}
+              onChange={(e) =>
+                setConfirmPassword(
+                  e.target.value
+                )
               }
               placeholder="Confirm password"
               className="
@@ -193,7 +258,6 @@ const SignupForm = () => {
                 placeholder:text-gray-400
               "
             />
-
             <button
               type="button"
               onClick={() =>
@@ -210,10 +274,14 @@ const SignupForm = () => {
             </button>
           </div>
         </div>
-
-        {/* SIGNUP BUTTON */}
+        {error && (
+          <p className="text-red-400 text-sm">
+            {error}
+          </p>
+        )}
         <button
           type="submit"
+          disabled={loading}
           className="
             w-full
             py-3
@@ -229,49 +297,13 @@ const SignupForm = () => {
             shadow-lg
           "
         >
-          Create Account
+          {loading
+            ? "Creating Account..."
+            : "Create Account"}
         </button>
+
       </form>
-
-      {/* DIVIDER */}
-      <div className="flex items-center gap-4 my-6">
-        <div className="flex-1 h-px bg-white/10" />
-
-        <span className="text-gray-400 text-sm">
-          OR
-        </span>
-
-        <div className="flex-1 h-px bg-white/10" />
-      </div>
-
-      {/* GOOGLE BUTTON */}
-      <button
-        className="
-          w-full
-          py-3
-          rounded-2xl
-          bg-white/10
-          border
-          border-white/10
-          text-white
-          font-medium
-          hover:bg-white/20
-          transition-all
-          duration-300
-        "
-      >
-        Continue with Google
-      </button>
-
-      {/* LOGIN */}
-      <p className="text-center text-gray-400 text-sm mt-6">
-        Already have an account?{" "}
-        <span className="text-purple-400 cursor-pointer hover:text-purple-300">
-          Login
-        </span>
-      </p>
     </motion.div>
   )
 }
-
 export default SignupForm

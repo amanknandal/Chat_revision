@@ -1,5 +1,4 @@
 import { motion } from "framer-motion"
-
 import {
   FileText,
   Quote,
@@ -7,6 +6,17 @@ import {
 } from "lucide-react"
 
 const CitationCard = ({ citation }) => {
+
+  const handleOpenSource = () => {
+
+    if (citation.file_url) {
+      window.open(
+        citation.file_url,
+        "_blank"
+      )
+    }
+  }
+
   return (
     <motion.div
       whileHover={{ scale: 1.01 }}
@@ -21,12 +31,10 @@ const CitationCard = ({ citation }) => {
         shadow-lg
       "
     >
-      {/* TOP */}
       <div className="flex items-start justify-between gap-4">
-        
-        {/* LEFT */}
+
         <div className="flex items-start gap-3">
-          
+
           <div
             className="
               w-12
@@ -45,6 +53,7 @@ const CitationCard = ({ citation }) => {
           </div>
 
           <div>
+
             <h3 className="text-white font-semibold">
               {citation.source}
             </h3>
@@ -52,11 +61,12 @@ const CitationCard = ({ citation }) => {
             <p className="text-gray-400 text-sm mt-1">
               Page {citation.page}
             </p>
+
           </div>
         </div>
 
-        {/* BUTTON */}
         <button
+          onClick={handleOpenSource}
           className="
             p-2
             rounded-xl
@@ -69,27 +79,28 @@ const CitationCard = ({ citation }) => {
         </button>
       </div>
 
-      {/* QUOTE */}
-      <div
-        className="
-          mt-4
-          bg-white/5
-          border
-          border-white/10
-          rounded-2xl
-          p-4
-        "
-      >
-        <div className="flex items-start gap-3">
-          
-          <Quote className="text-purple-400 w-5 h-5 mt-1" />
+      {citation.quote && (
+        <div
+          className="
+            mt-4
+            bg-white/5
+            border
+            border-white/10
+            rounded-2xl
+            p-4
+          "
+        >
+          <div className="flex items-start gap-3">
 
-          <p className="text-gray-300 text-sm leading-relaxed">
-            “Normalization is the process of organizing data
-            to minimize redundancy and dependency.”
-          </p>
+            <Quote className="text-purple-400 w-5 h-5 mt-1" />
+
+            <p className="text-gray-300 text-sm leading-relaxed">
+              “{citation.quote}”
+            </p>
+
+          </div>
         </div>
-      </div>
+      )}
     </motion.div>
   )
 }

@@ -1,10 +1,8 @@
 import { motion } from "framer-motion"
 import { Bot, User } from "lucide-react"
 import CitationCard from "./CitationCard"
-
 const ChatMessage = ({ message }) => {
   const isUser = message.sender === "user"
-
   return (
     <motion.div
       initial={{ opacity: 0, y: 15 }}
@@ -22,7 +20,6 @@ const ChatMessage = ({ message }) => {
           ${isUser ? "flex-row-reverse" : "flex-row"}
         `}
       >
-        {/* AVATAR */}
         <div
           className={`
             w-12
@@ -46,8 +43,8 @@ const ChatMessage = ({ message }) => {
           )}
         </div>
 
-        {/* MESSAGE */}
         <div>
+
           <div
             className={`
               px-5
@@ -78,16 +75,15 @@ const ChatMessage = ({ message }) => {
             </p>
           </div>
 
-          {/* CITATION */}
           {!isUser && message.citation && (
             <div className="mt-3">
               <CitationCard citation={message.citation} />
             </div>
           )}
+
         </div>
       </div>
     </motion.div>
   )
 }
-
 export default ChatMessage
