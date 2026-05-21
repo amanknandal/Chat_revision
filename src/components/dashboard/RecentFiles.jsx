@@ -1,3 +1,4 @@
+import { useEffect, useState } from "react"
 import { motion } from "framer-motion"
 import {
   FileText,
@@ -5,31 +6,26 @@ import {
   Clock3,
   Download,
 } from "lucide-react"
-
-const files = [
-  {
-    name: "DBMS Notes.pdf",
-    size: "4.2 MB",
-    time: "2 hours ago",
-  },
-  {
-    name: "Operating System.pdf",
-    size: "8.7 MB",
-    time: "5 hours ago",
-  },
-  {
-    name: "Computer Networks.pdf",
-    size: "6.1 MB",
-    time: "Yesterday",
-  },
-  {
-    name: "AI Research Paper.pdf",
-    size: "12.4 MB",
-    time: "2 days ago",
-  },
-]
-
 const RecentFiles = () => {
+  const [files, setFiles] =
+    useState([])
+  useEffect(() => {
+    const storedFiles =
+      JSON.parse(
+        localStorage.getItem(
+          "uploaded_pdfs"
+        )
+      ) || []
+    setFiles(storedFiles)
+  }, [])
+  const handleDownload = (fileUrl) => {
+    if (fileUrl) {
+      window.open(
+        fileUrl,
+        "_blank"
+      )
+    }
+  }
   return (
     <motion.div
       initial={{ opacity: 0, y: 30 }}
@@ -45,18 +41,15 @@ const RecentFiles = () => {
         shadow-xl
       "
     >
-      {/* HEADER */}
       <div className="flex items-center justify-between mb-6">
         <div>
           <h2 className="text-white text-2xl font-bold">
             Recent Files
           </h2>
-
           <p className="text-gray-400 text-sm mt-1">
             Recently uploaded study materials
           </p>
         </div>
-
         <button
           className="
             px-4
@@ -72,9 +65,18 @@ const RecentFiles = () => {
           View All
         </button>
       </div>
-
-      {/* FILE LIST */}
       <div className="space-y-4">
+        {files.length === 0 && (
+          <div
+            className="
+              text-center
+              py-10
+              text-gray-400
+            "
+          >
+            No PDFs uploaded yet
+          </div>
+        )}
         {files.map((file, index) => (
           <motion.div
             key={index}
@@ -94,10 +96,7 @@ const RecentFiles = () => {
               duration-300
             "
           >
-            {/* LEFT */}
             <div className="flex items-center gap-4">
-              
-              {/* ICON */}
               <div
                 className="
                   w-14
@@ -114,33 +113,29 @@ const RecentFiles = () => {
               >
                 <FileText className="text-white w-7 h-7" />
               </div>
-
-              {/* INFO */}
               <div>
                 <h3 className="text-white font-semibold">
                   {file.name}
                 </h3>
-
                 <div className="flex items-center gap-3 mt-1">
                   <span className="text-gray-400 text-sm">
                     {file.size}
                   </span>
-
                   <div className="w-1 h-1 bg-gray-500 rounded-full" />
-
                   <div className="flex items-center gap-1 text-gray-400 text-sm">
                     <Clock3 className="w-4 h-4" />
-
                     {file.time}
                   </div>
                 </div>
               </div>
             </div>
-
-            {/* RIGHT */}
             <div className="flex items-center gap-2">
-              
               <button
+                onClick={() =>
+                  handleDownload(
+                    file.url
+                  )
+                }
                 className="
                   p-3
                   rounded-xl
@@ -152,7 +147,6 @@ const RecentFiles = () => {
               >
                 <Download className="text-white w-5 h-5" />
               </button>
-
               <button
                 className="
                   p-3
@@ -172,5 +166,4 @@ const RecentFiles = () => {
     </motion.div>
   )
 }
-
 export default RecentFiles

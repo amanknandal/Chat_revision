@@ -1,7 +1,18 @@
 import { motion } from "framer-motion"
 import { Sparkles } from "lucide-react"
-
+import { useNavigate } from "react-router-dom"
 const WelcomeCard = () => {
+  const navigate = useNavigate()
+  const user =
+    JSON.parse(
+      localStorage.getItem("user")
+    ) || {}
+  const uploadedFiles =
+    JSON.parse(
+      localStorage.getItem(
+        "uploaded_pdfs"
+      )
+    ) || []
   return (
     <motion.div
       initial={{ opacity: 0, y: 30 }}
@@ -19,7 +30,6 @@ const WelcomeCard = () => {
         shadow-2xl
       "
     >
-      {/* BACKGROUND GLOW */}
       <div
         className="
           absolute
@@ -32,11 +42,7 @@ const WelcomeCard = () => {
           blur-3xl
         "
       />
-
-      {/* CONTENT */}
       <div className="relative z-10 flex flex-col lg:flex-row lg:items-center lg:justify-between gap-8">
-        
-        {/* LEFT */}
         <div>
           <div
             className="
@@ -51,12 +57,10 @@ const WelcomeCard = () => {
             "
           >
             <Sparkles className="w-5 h-5 text-yellow-300" />
-
             <span className="text-white text-sm font-medium">
               AI Powered Learning
             </span>
           </div>
-
           <h1
             className="
               text-3xl
@@ -66,10 +70,9 @@ const WelcomeCard = () => {
               leading-tight
             "
           >
-            Learn Faster <br />
-            With AI Study Assistant
+            Welcome Back <br />
+            {user.username || "Student"}
           </h1>
-
           <p
             className="
               text-white/80
@@ -83,9 +86,11 @@ const WelcomeCard = () => {
             Upload PDFs, generate smart notes, ask questions,
             create flashcards, and prepare for exams with AI.
           </p>
-
           <div className="flex flex-wrap gap-4 mt-8">
             <button
+              onClick={() =>
+                navigate("/chat")
+              }
               className="
                 px-6
                 py-3
@@ -101,7 +106,6 @@ const WelcomeCard = () => {
             >
               Upload PDF
             </button>
-
             <button
               className="
                 px-6
@@ -121,8 +125,6 @@ const WelcomeCard = () => {
             </button>
           </div>
         </div>
-
-        {/* RIGHT CARD */}
         <div
           className="
             w-full
@@ -138,54 +140,50 @@ const WelcomeCard = () => {
           <h3 className="text-white text-xl font-bold mb-6">
             Today's Progress
           </h3>
-
           <div className="space-y-5">
-            {/* ITEM */}
             <div>
               <div className="flex items-center justify-between mb-2">
                 <span className="text-white/80 text-sm">
                   PDFs Studied
                 </span>
-
                 <span className="text-white font-semibold">
-                  12
+                  {uploadedFiles.length}
                 </span>
               </div>
-
               <div className="w-full h-3 bg-white/10 rounded-full overflow-hidden">
-                <div className="w-[70%] h-full bg-white rounded-full" />
+                <div
+                  className="h-full bg-white rounded-full"
+                  style={{
+                    width: `${Math.min(
+                      uploadedFiles.length * 10,
+                      100
+                    )}%`,
+                  }}
+                />
               </div>
             </div>
-
-            {/* ITEM */}
             <div>
               <div className="flex items-center justify-between mb-2">
                 <span className="text-white/80 text-sm">
                   Quiz Accuracy
                 </span>
-
                 <span className="text-white font-semibold">
                   88%
                 </span>
               </div>
-
               <div className="w-full h-3 bg-white/10 rounded-full overflow-hidden">
                 <div className="w-[88%] h-full bg-green-400 rounded-full" />
               </div>
             </div>
-
-            {/* ITEM */}
             <div>
               <div className="flex items-center justify-between mb-2">
                 <span className="text-white/80 text-sm">
                   Revision Goal
                 </span>
-
                 <span className="text-white font-semibold">
                   60%
                 </span>
               </div>
-
               <div className="w-full h-3 bg-white/10 rounded-full overflow-hidden">
                 <div className="w-[60%] h-full bg-yellow-300 rounded-full" />
               </div>
@@ -196,5 +194,4 @@ const WelcomeCard = () => {
     </motion.div>
   )
 }
-
 export default WelcomeCard

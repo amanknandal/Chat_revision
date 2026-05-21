@@ -7,33 +7,43 @@ import {
   Settings,
   LogOut,
 } from "lucide-react"
-
 import { motion } from "framer-motion"
-
+import { useNavigate, useLocation } from "react-router-dom"
 const menuItems = [
   {
     title: "Dashboard",
     icon: LayoutDashboard,
+    path: "/dashboard",
   },
   {
     title: "My PDFs",
     icon: FileText,
+    path: "/upload",
   },
   {
     title: "AI Chat",
     icon: MessageSquare,
+    path: "/chat",
   },
   {
     title: "Flashcards",
     icon: Brain,
+    path: "/flashcards",
   },
   {
     title: "Revision Notes",
     icon: BookOpen,
+    path: "/notes",
   },
 ]
-
 const Sidebar = () => {
+  const navigate = useNavigate()
+  const location = useLocation()
+  const handleLogout = () => {
+    localStorage.removeItem("token")
+    localStorage.removeItem("user")
+    navigate("/login")
+  }
   return (
     <motion.aside
       initial={{ x: -80, opacity: 0 }}
@@ -53,9 +63,7 @@ const Sidebar = () => {
         p-6
       "
     >
-      {/* TOP */}
       <div>
-        {/* LOGO */}
         <div className="flex items-center gap-3 mb-10">
           <div
             className="
@@ -76,27 +84,26 @@ const Sidebar = () => {
           >
             AI
           </div>
-
           <div>
             <h1 className="text-white text-lg font-bold">
               Study Assistant
             </h1>
-
             <p className="text-gray-400 text-xs">
               Smart Learning Platform
             </p>
           </div>
         </div>
-
-        {/* MENU */}
         <div className="space-y-3">
           {menuItems.map((item, index) => {
             const Icon = item.icon
-
+            const active = location.pathname === item.path
             return (
               <button
                 key={index}
-                className="
+                onClick={() =>
+                  navigate(item.path)
+                }
+                className={`
                   w-full
                   flex
                   items-center
@@ -104,16 +111,26 @@ const Sidebar = () => {
                   px-4
                   py-3
                   rounded-2xl
-                  text-gray-300
-                  hover:text-white
-                  hover:bg-white/10
                   transition-all
                   duration-300
                   group
-                "
+                  ${
+                    active
+                      ? `
+                        bg-gradient-to-r
+                        from-purple-500
+                        to-blue-500
+                        text-white
+                      `
+                      : `
+                        text-gray-300
+                        hover:text-white
+                        hover:bg-white/10
+                      `
+                  }
+                `}
               >
                 <Icon className="w-5 h-5" />
-
                 <span className="font-medium">
                   {item.title}
                 </span>
@@ -122,8 +139,6 @@ const Sidebar = () => {
           })}
         </div>
       </div>
-
-      {/* BOTTOM */}
       <div className="space-y-3">
         <button
           className="
@@ -142,13 +157,12 @@ const Sidebar = () => {
           "
         >
           <Settings className="w-5 h-5" />
-
           <span className="font-medium">
             Settings
           </span>
         </button>
-
         <button
+          onClick={handleLogout}
           className="
             w-full
             flex
@@ -164,7 +178,6 @@ const Sidebar = () => {
           "
         >
           <LogOut className="w-5 h-5" />
-
           <span className="font-medium">
             Logout
           </span>
@@ -173,5 +186,4 @@ const Sidebar = () => {
     </motion.aside>
   )
 }
-
 export default Sidebar

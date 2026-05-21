@@ -1,7 +1,18 @@
 import { Menu, Bell, Search } from "lucide-react"
 import { motion } from "framer-motion"
-
+import { useNavigate } from "react-router-dom"
 const Navbar = ({ toggleSidebar }) => {
+  const navigate = useNavigate()
+  const user =
+    JSON.parse(
+      localStorage.getItem("user")
+    ) || {}
+  const handleLogout = () => {
+    localStorage.removeItem("token")
+    localStorage.removeItem("user")
+
+    navigate("/login")
+  }
   return (
     <motion.nav
       initial={{ y: -40, opacity: 0 }}
@@ -23,10 +34,7 @@ const Navbar = ({ toggleSidebar }) => {
         z-50
       "
     >
-      {/* LEFT */}
       <div className="flex items-center gap-4">
-        
-        {/* Mobile Menu Button */}
         <button
           onClick={toggleSidebar}
           className="
@@ -39,8 +47,6 @@ const Navbar = ({ toggleSidebar }) => {
         >
           <Menu className="text-white w-6 h-6" />
         </button>
-
-        {/* Logo */}
         <div className="flex items-center gap-2">
           <div
             className="
@@ -61,20 +67,16 @@ const Navbar = ({ toggleSidebar }) => {
           >
             AI
           </div>
-
           <div>
             <h1 className="text-white font-bold text-lg">
               Study Assistant
             </h1>
-
             <p className="text-gray-400 text-xs">
               AI PDF Learning Platform
             </p>
           </div>
         </div>
       </div>
-
-      {/* CENTER SEARCH */}
       <div className="hidden md:flex items-center w-[40%]">
         <div
           className="
@@ -90,7 +92,6 @@ const Navbar = ({ toggleSidebar }) => {
           "
         >
           <Search className="text-gray-400 w-5 h-5" />
-
           <input
             type="text"
             placeholder="Search PDFs, notes, quizzes..."
@@ -105,11 +106,7 @@ const Navbar = ({ toggleSidebar }) => {
           />
         </div>
       </div>
-
-      {/* RIGHT */}
       <div className="flex items-center gap-4">
-
-        {/* Notifications */}
         <button
           className="
             relative
@@ -133,8 +130,6 @@ const Navbar = ({ toggleSidebar }) => {
             "
           />
         </button>
-
-        {/* User Profile */}
         <div
           className="
             flex
@@ -158,20 +153,32 @@ const Navbar = ({ toggleSidebar }) => {
               object-cover
             "
           />
-
           <div className="hidden sm:block">
             <h3 className="text-white text-sm font-semibold">
-              Raja bhai
+              {user.username || "Student"}
             </h3>
-
             <p className="text-gray-400 text-xs">
               Student
             </p>
           </div>
         </div>
+        <button
+          onClick={handleLogout}
+          className="
+            px-4
+            py-2
+            rounded-2xl
+            bg-red-500/20
+            text-red-400
+            hover:bg-red-500/30
+            transition-all
+            duration-300
+          "
+        >
+          Logout
+        </button>
       </div>
     </motion.nav>
   )
 }
-
 export default Navbar

@@ -8,9 +8,7 @@ import {
   LogOut,
   X,
 } from "lucide-react"
-
 import { motion, AnimatePresence } from "framer-motion"
-
 const menuItems = [
   {
     title: "Dashboard",
@@ -33,13 +31,11 @@ const menuItems = [
     icon: BookOpen,
   },
 ]
-
 const MobileSidebar = ({ isOpen, setIsOpen }) => {
   return (
     <AnimatePresence>
       {isOpen && (
         <>
-          {/* OVERLAY */}
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
@@ -54,9 +50,7 @@ const MobileSidebar = ({ isOpen, setIsOpen }) => {
               lg:hidden
             "
           />
-
-          {/* SIDEBAR */}
-          <motion.div
+         <motion.div
             initial={{ x: -300 }}
             animate={{ x: 0 }}
             exit={{ x: -300 }}
@@ -78,9 +72,7 @@ const MobileSidebar = ({ isOpen, setIsOpen }) => {
               lg:hidden
             "
           >
-            {/* TOP */}
             <div>
-              {/* HEADER */}
               <div className="flex items-center justify-between mb-10">
                 <div className="flex items-center gap-3">
                   <div
@@ -101,18 +93,15 @@ const MobileSidebar = ({ isOpen, setIsOpen }) => {
                   >
                     AI
                   </div>
-
                   <div>
                     <h1 className="text-white text-lg font-bold">
                       Study Assistant
                     </h1>
-
                     <p className="text-gray-400 text-xs">
                       Smart Learning
                     </p>
                   </div>
                 </div>
-
                 <button
                   onClick={() => setIsOpen(false)}
                   className="
@@ -125,12 +114,9 @@ const MobileSidebar = ({ isOpen, setIsOpen }) => {
                   <X className="text-white w-6 h-6" />
                 </button>
               </div>
-
-              {/* MENU */}
               <div className="space-y-3">
                 {menuItems.map((item, index) => {
                   const Icon = item.icon
-
                   return (
                     <button
                       key={index}
@@ -150,7 +136,6 @@ const MobileSidebar = ({ isOpen, setIsOpen }) => {
                       "
                     >
                       <Icon className="w-5 h-5" />
-
                       <span className="font-medium">
                         {item.title}
                       </span>
@@ -159,8 +144,6 @@ const MobileSidebar = ({ isOpen, setIsOpen }) => {
                 })}
               </div>
             </div>
-
-            {/* BOTTOM */}
             <div className="space-y-3">
               <button
                 className="
@@ -213,5 +196,4 @@ const MobileSidebar = ({ isOpen, setIsOpen }) => {
     </AnimatePresence>
   )
 }
-
 export default MobileSidebar
