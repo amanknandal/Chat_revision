@@ -1,5 +1,4 @@
 import { motion } from "framer-motion"
-
 const StatsCard = ({
   title,
   value,
@@ -23,7 +22,6 @@ const StatsCard = ({
         shadow-xl
       "
     >
-      {/* GLOW */}
       <div
         className={`
           absolute
@@ -37,11 +35,7 @@ const StatsCard = ({
           ${color}
         `}
       />
-
-      {/* CONTENT */}
       <div className="relative z-10">
-        
-        {/* TOP */}
         <div className="flex items-center justify-between">
           <div
             className={`
@@ -56,7 +50,6 @@ const StatsCard = ({
           >
             <Icon className="text-white w-7 h-7" />
           </div>
-
           <span
             className="
               px-3
@@ -71,13 +64,10 @@ const StatsCard = ({
             +{increase}%
           </span>
         </div>
-
-        {/* TEXT */}
-        <div className="mt-6">
+       <div className="mt-6">
           <h3 className="text-gray-400 text-sm font-medium">
             {title}
           </h3>
-
           <h1 className="text-white text-4xl font-bold mt-2">
             {value}
           </h1>
@@ -86,5 +76,4 @@ const StatsCard = ({
     </motion.div>
   )
 }
-
 export default StatsCard

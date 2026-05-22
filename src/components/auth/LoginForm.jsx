@@ -30,7 +30,7 @@ const LoginForm = () => {
           "user",
           JSON.stringify(data.user)
         )
-        navigate("/dashboard")
+        navigate("/")
       } else {
         setError(
           data.error || "Login failed"
@@ -192,6 +192,16 @@ const LoginForm = () => {
             : "Login"}
         </button>
       </form>
+      <p className="text-gray-400 text-center mt-4 text-sm">
+        Don’t have an account?{" "}
+        <button
+          type="button"
+          onClick={() => navigate("/signup")}
+          className="text-purple-400 hover:underline"
+        >
+          Sign up
+        </button>
+      </p>
     </motion.div>
   )
 }

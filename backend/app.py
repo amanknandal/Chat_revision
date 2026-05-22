@@ -33,6 +33,12 @@ app.register_blueprint(
     url_prefix="/api/auth"
 )
 app.register_blueprint(
+)
+app.register_blueprint(
+)
+app.register_blueprint(
+)
+app.register_blueprint(
     upload_bp,
     url_prefix="/api/upload"
 )

@@ -1,17 +1,38 @@
 import { motion } from "framer-motion"
 import { UploadCloud, FileText } from "lucide-react"
 import { useRef, useState } from "react"
+import { uploadPDF } from "../../services/api"
 
 const UploadBox = () => {
   const fileInputRef = useRef(null)
   const [fileName, setFileName] = useState("")
+  const [uploading, setUploading] = useState(false)
+  const [message, setMessage] = useState("")
 
-  const handleFileChange = (e) => {
+  const handleFileChange = async (e) => {
     const file = e.target.files[0]
 
-    if (file) {
-      setFileName(file.name)
+    if (!file) return
+
+    setFileName(file.name)
+    setUploading(true)
+    setMessage("")
+
+    try {
+      const data = await uploadPDF(file)
+      if (data.session_id) {
+        localStorage.setItem("session_id", data.session_id)
+        setMessage("PDF uploaded successfully. You can now chat with it.")
+      } else {
+        setMessage("Upload succeeded, but no session was returned.")
+      }
+    } catch (err) {
+      setMessage(
+        err?.response?.data?.error ||
+        "Failed to upload PDF. Check your login and try again."
+      )
     }
+    setUploading(false)
   }
 
   return (
@@ -49,7 +70,7 @@ const UploadBox = () => {
 
       {/* CONTENT */}
       <div className="relative z-10">
-        
+
         {/* ICON */}
         <div
           className="
@@ -109,6 +130,23 @@ const UploadBox = () => {
           onChange={handleFileChange}
           className="hidden"
         />
+
+        {uploading && (
+          <p className="mt-4 text-sm text-blue-200">
+            Uploading {fileName || "your PDF"}...
+          </p>
+        )}
+
+        {message && (
+          <p
+            className={`mt-4 text-sm ${message.includes("Failed")
+                ? "text-red-400"
+                : "text-green-300"
+              }`}
+          >
+            {message}
+          </p>
+        )}
 
         {/* FILE PREVIEW */}
         {fileName && (

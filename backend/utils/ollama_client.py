@@ -1,13 +1,15 @@
 import requests
 import os
+
 OLLAMA_URL = os.getenv(
     "OLLAMA_URL",
     "http://127.0.0.1:11434/api/generate"
 )
 OLLAMA_MODEL = os.getenv(
     "OLLAMA_MODEL",
-    "qwen2.5:1.5b"
+    "phi3:mini"
 )
+
 def ask_ollama(prompt):
     try:
         payload = {
@@ -25,10 +27,19 @@ def ask_ollama(prompt):
                 f"Ollama API Error: {response.text}"
             )
         data = response.json()
-        return data.get(
-            "response",
-            "No response generated."
-        )
+        if "response" in data:
+            return data["response"]
+        if "results" in data and data["results"]:
+            first_result = data["results"][0]
+            if isinstance(first_result, dict):
+                return first_result.get(
+                    "content",
+                    first_result.get(
+                        "response",
+                        "No response generated."
+                    )
+                )
+        return "No response generated."
     except requests.exceptions.Timeout:
         raise Exception(
             "Ollama request timed out"

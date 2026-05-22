@@ -991,7 +991,7 @@ const PDFViewerPage = () => {
   )
 }
 
-export default PDFViewerPage" part one of the frontend code wait i am going to give you part 2 bec of limit i am sending it in 2 pars 
+export default PDFViewerPage" 
 "import { useState } from "react"
 import { motion } from "framer-motion"
 
@@ -2345,7 +2345,6 @@ const Toast = ({
     </AnimatePresence>
   )
 }
-
 export default Toast", "import { BrowserRouter, Routes, Route } from "react-router-dom"
 import Dashboard from "./components/pages/Dashboard"
 import Chat from "./components/pages/Chat"
@@ -2353,7 +2352,6 @@ import Upload from "./components/pages/Upload"
 import PDFViewerPage from "./components/pages/PDFViewerPage"
 import Login from "./components/pages/Login"
 import Signup from "./components/pages/Signup"
-
 const App = () => {
   return (
     <BrowserRouter basename="/Chat_revision/">
@@ -2369,5 +2367,4 @@ const App = () => {
     </BrowserRouter>
   )
 }
-
 export default App" don't give me extra space or comments in code 

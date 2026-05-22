@@ -54,7 +54,7 @@ const SignupForm = () => {
           "user",
           JSON.stringify(data.user)
         )
-        navigate("/dashboard")
+        navigate("/")
       } else {
         setError(
           data.error || "Signup failed"
@@ -301,8 +301,17 @@ const SignupForm = () => {
             ? "Creating Account..."
             : "Create Account"}
         </button>
-
       </form>
+      <p className="text-gray-400 text-center mt-4 text-sm">
+        Already have an account?{" "}
+        <button
+          type="button"
+          onClick={() => navigate("/login")}
+          className="text-purple-400 hover:underline"
+        >
+          Login
+        </button>
+      </p>
     </motion.div>
   )
 }

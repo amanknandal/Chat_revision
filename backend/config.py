@@ -16,5 +16,5 @@ class Config:
     )
     OLLAMA_MODEL = os.getenv(
         "OLLAMA_MODEL",
-        "qwen2.5:1.5b"
+        "phi3:mini"
     )
