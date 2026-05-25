@@ -1,18 +1,29 @@
-import { useState } from "react"
+import { useEffect,useState } from "react"
 import { motion } from "framer-motion"
-
 import {
   Moon,
   Sun,
 } from "lucide-react"
 
-const ThemeToggle = () => {
-  const [darkMode, setDarkMode] = useState(true)
+const ThemeToggle=()=>{
+  const [darkMode,setDarkMode]=useState(
+    localStorage.getItem("theme") !== "light"
+  )
 
-  return (
+  useEffect(()=>{
+    if(darkMode){
+      document.documentElement.classList.add("dark")
+      localStorage.setItem("theme","dark")
+    }else{
+      document.documentElement.classList.remove("dark")
+      localStorage.setItem("theme","light")
+    }
+  },[darkMode])
+
+  return(
     <motion.button
-      whileTap={{ scale: 0.9 }}
-      onClick={() => setDarkMode(!darkMode)}
+      whileTap={{ scale:0.9 }}
+      onClick={()=>setDarkMode(!darkMode)}
       className="
         relative
         flex
@@ -27,15 +38,14 @@ const ThemeToggle = () => {
         backdrop-blur-lg
       "
     >
-      {/* TOGGLE BALL */}
       <motion.div
         animate={{
-          x: darkMode ? 36 : 0,
+          x:darkMode ? 36 : 0,
         }}
         transition={{
-          type: "spring",
-          stiffness: 300,
-          damping: 20,
+          type:"spring",
+          stiffness:300,
+          damping:20,
         }}
         className="
           absolute
@@ -49,11 +59,8 @@ const ThemeToggle = () => {
         "
       />
 
-      {/* ICONS */}
       <div className="relative z-10 flex items-center justify-between w-full px-1">
-        
         <Sun className="text-yellow-300 w-5 h-5" />
-
         <Moon className="text-white w-5 h-5" />
       </div>
     </motion.button>

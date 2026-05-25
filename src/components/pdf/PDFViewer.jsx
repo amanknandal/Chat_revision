@@ -1,3 +1,4 @@
+import { useEffect, useState } from "react"
 import { motion } from "framer-motion"
 import {
   ChevronLeft,
@@ -6,8 +7,39 @@ import {
   ZoomOut,
   Download,
 } from "lucide-react"
-
-const PDFViewer = () => {
+import axios from "axios"
+const PDFViewer = ({ pdfId, pdfName }) => {
+  const [pdfUrl, setPdfUrl] = useState("")
+  const [scale, setScale] = useState(1)
+  useEffect(() => {
+    const fetchPDF = async () => {
+      try {
+        const token = localStorage.getItem("token")
+        const response = await axios.get(
+          `${import.meta.env.VITE_API_URL}/pdf/view/${pdfId}`,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        )
+        setPdfUrl(response.data.url)
+      } catch (error) {
+        console.log(error)
+      }
+    }
+    if (pdfId) {
+      fetchPDF()
+    }
+  }, [pdfId])
+  const zoomIn = () => {
+    setScale((prev) => prev + 0.1)
+  }
+  const zoomOut = () => {
+    if (scale > 0.5) {
+      setScale((prev) => prev - 0.1)
+    }
+  }
   return (
     <motion.div
       initial={{ opacity: 0 }}
@@ -20,9 +52,9 @@ const PDFViewer = () => {
         rounded-3xl
         overflow-hidden
         shadow-2xl
+        h-full
       "
     >
-      {/* TOPBAR */}
       <div
         className="
           flex
@@ -35,21 +67,19 @@ const PDFViewer = () => {
           bg-white/5
         "
       >
-        {/* FILE INFO */}
         <div>
           <h2 className="text-white font-bold text-lg">
-            DBMS Complete Notes.pdf
+            {pdfName || "PDF Viewer"}
           </h2>
 
           <p className="text-gray-400 text-sm mt-1">
-            Page 1 of 120
+            AI PDF Reader
           </p>
         </div>
 
-        {/* ACTIONS */}
         <div className="flex items-center gap-3">
-          
           <button
+            onClick={zoomOut}
             className="
               p-3
               rounded-2xl
@@ -63,6 +93,7 @@ const PDFViewer = () => {
           </button>
 
           <button
+            onClick={zoomIn}
             className="
               p-3
               rounded-2xl
@@ -75,7 +106,10 @@ const PDFViewer = () => {
             <ZoomIn className="text-white w-5 h-5" />
           </button>
 
-          <button
+          <a
+            href={pdfUrl}
+            target="_blank"
+            rel="noreferrer"
             className="
               p-3
               rounded-2xl
@@ -86,11 +120,9 @@ const PDFViewer = () => {
             "
           >
             <Download className="text-white w-5 h-5" />
-          </button>
+          </a>
         </div>
       </div>
-
-      {/* PDF CONTENT */}
       <div
         className="
           relative
@@ -100,9 +132,9 @@ const PDFViewer = () => {
           bg-[#0B1120]
           min-h-[700px]
           p-8
+          overflow-auto
         "
       >
-        {/* PREVIOUS BUTTON */}
         <button
           className="
             absolute
@@ -120,57 +152,21 @@ const PDFViewer = () => {
         >
           <ChevronLeft className="text-white w-6 h-6" />
         </button>
-
-        {/* PDF PAGE */}
-        <motion.div
-          whileHover={{ scale: 1.01 }}
-          className="
-            w-full
-            max-w-4xl
-            bg-white
-            rounded-2xl
-            shadow-2xl
-            min-h-[600px]
-            p-10
-            overflow-hidden
-          "
-        >
-          {/* MOCK PDF CONTENT */}
-          <div className="space-y-6">
-            <div className="h-8 w-2/3 bg-gray-300 rounded-lg" />
-
-            <div className="space-y-3">
-              <div className="h-4 bg-gray-200 rounded-lg w-full" />
-              <div className="h-4 bg-gray-200 rounded-lg w-[95%]" />
-              <div className="h-4 bg-gray-200 rounded-lg w-[90%]" />
-              <div className="h-4 bg-gray-200 rounded-lg w-[85%]" />
-            </div>
-
-            <div className="space-y-3 mt-10">
-              <div className="h-4 bg-gray-200 rounded-lg w-full" />
-              <div className="h-4 bg-gray-200 rounded-lg w-[92%]" />
-              <div className="h-4 bg-gray-200 rounded-lg w-[88%]" />
-              <div className="h-4 bg-gray-200 rounded-lg w-[94%]" />
-            </div>
-
-            <div
-              className="
-                mt-10
-                h-60
-                rounded-2xl
-                bg-gray-200
-              "
-            />
-
-            <div className="space-y-3 mt-10">
-              <div className="h-4 bg-gray-200 rounded-lg w-full" />
-              <div className="h-4 bg-gray-200 rounded-lg w-[93%]" />
-              <div className="h-4 bg-gray-200 rounded-lg w-[87%]" />
-            </div>
+        {pdfUrl ? (
+          <iframe
+            src={pdfUrl}
+            title="PDF Viewer"
+            className="w-full h-[700px] rounded-2xl bg-white"
+            style={{
+              transform: `scale(${scale})`,
+              transformOrigin: "top center",
+            }}
+          />
+        ) : (
+          <div className="text-white text-lg">
+            Loading PDF...
           </div>
-        </motion.div>
-
-        {/* NEXT BUTTON */}
+        )}
         <button
           className="
             absolute
@@ -192,5 +188,4 @@ const PDFViewer = () => {
     </motion.div>
   )
 }
-
 export default PDFViewer

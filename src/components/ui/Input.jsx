@@ -1,24 +1,24 @@
 import { motion } from "framer-motion"
-
-const Input = ({
-  icon: Icon,
-  type = "text",
+const Input=({
+  icon:Icon,
+  type="text",
   placeholder,
   value,
   onChange,
   label,
-}) => {
-  return (
+  name,
+  required=false,
+  disabled=false,
+})=>{
+  return(
     <div className="w-full">
       {label && (
         <label className="block text-sm text-gray-300 mb-2">
           {label}
         </label>
       )}
-
-      {/* INPUT CONTAINER */}
       <motion.div
-        whileFocus={{ scale: 1.01 }}
+        whileFocus={{ scale:1.01 }}
         className="
           flex
           items-center
@@ -38,23 +38,25 @@ const Input = ({
         {Icon && (
           <Icon className="text-gray-400 w-5 h-5" />
         )}
-
         <input
           type={type}
+          name={name}
           placeholder={placeholder}
           value={value}
           onChange={onChange}
+          required={required}
+          disabled={disabled}
           className="
             w-full
             bg-transparent
             outline-none
             text-white
             placeholder:text-gray-400
+            disabled:opacity-50
           "
         />
       </motion.div>
     </div>
   )
 }
-
 export default Input

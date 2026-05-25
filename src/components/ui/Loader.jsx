@@ -1,18 +1,15 @@
 import { motion } from "framer-motion"
 
-const Loader = () => {
-  return (
+const Loader=()=>{
+  return(
     <div className="flex items-center justify-center py-10">
-      
       <div className="relative w-20 h-20">
-        
-        {/* OUTER RING */}
         <motion.div
-          animate={{ rotate: 360 }}
+          animate={{ rotate:360 }}
           transition={{
-            duration: 2,
-            repeat: Infinity,
-            ease: "linear",
+            duration:2,
+            repeat:Infinity,
+            ease:"linear",
           }}
           className="
             absolute
@@ -24,13 +21,12 @@ const Loader = () => {
           "
         />
 
-        {/* INNER RING */}
         <motion.div
-          animate={{ rotate: -360 }}
+          animate={{ rotate:-360 }}
           transition={{
-            duration: 1.5,
-            repeat: Infinity,
-            ease: "linear",
+            duration:1.5,
+            repeat:Infinity,
+            ease:"linear",
           }}
           className="
             absolute
@@ -42,7 +38,6 @@ const Loader = () => {
           "
         />
 
-        {/* CENTER DOT */}
         <div
           className="
             absolute

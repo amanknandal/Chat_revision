@@ -1,15 +1,35 @@
 import { motion } from "framer-motion"
-
-import {
-  FileText,
-  CalendarDays,
-  MoreVertical,
-  Trash2,
-  Eye,
-  MessageSquare,
-} from "lucide-react"
-
-const PDFCard = ({ pdf }) => {
+import { FileText,CalendarDays,Trash2,Eye,MessageSquare,} from "lucide-react"
+import { useNavigate } from "react-router-dom"
+import axios from "axios"
+const PDFCard = ({ pdf, refreshPDFs }) => {
+  const navigate = useNavigate()
+  const handleDelete = async () => {
+    try {
+      const token = localStorage.getItem("token")
+      await axios.delete(
+        `${import.meta.env.VITE_API_URL}/pdf/delete/${pdf.id}`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      )
+      refreshPDFs()
+    } catch (error) {
+      console.log(error)
+    }
+  }
+  const handleView = () => {
+    navigate(
+      `/pdf-viewer?id=${pdf.id}&name=${encodeURIComponent(pdf.name)}`
+    )
+  }
+  const handleChat = () => {
+    navigate(
+      `/chat?id=${pdf.id}&name=${encodeURIComponent(pdf.name)}`
+    )
+  }
   return (
     <motion.div
       whileHover={{ y: -6 }}
@@ -29,7 +49,6 @@ const PDFCard = ({ pdf }) => {
         duration-300
       "
     >
-      {/* GLOW */}
       <div
         className="
           absolute
@@ -42,11 +61,7 @@ const PDFCard = ({ pdf }) => {
           blur-3xl
         "
       />
-
-      {/* TOP */}
       <div className="relative z-10 flex items-start justify-between">
-        
-        {/* ICON */}
         <div
           className="
             w-16
@@ -63,32 +78,17 @@ const PDFCard = ({ pdf }) => {
         >
           <FileText className="text-white w-8 h-8" />
         </div>
-
-        {/* MENU */}
-        <button
-          className="
-            p-2
-            rounded-xl
-            hover:bg-white/10
-            transition
-          "
-        >
-          <MoreVertical className="text-white w-5 h-5" />
-        </button>
       </div>
-
-      {/* INFO */}
       <div className="relative z-10 mt-6">
         <h2 className="text-white text-xl font-bold line-clamp-1">
           {pdf.name}
         </h2>
-
         <div className="flex items-center gap-2 mt-3 text-gray-400 text-sm">
           <CalendarDays className="w-4 h-4" />
-
-          <span>{pdf.date}</span>
+          <span>
+            {new Date(pdf.created_at).toLocaleDateString()}
+          </span>
         </div>
-
         <div className="flex items-center gap-3 mt-4">
           <span
             className="
@@ -100,9 +100,8 @@ const PDFCard = ({ pdf }) => {
               text-sm
             "
           >
-            {pdf.size}
+            {pdf.file_size || "PDF"}
           </span>
-
           <span
             className="
               px-3
@@ -117,11 +116,9 @@ const PDFCard = ({ pdf }) => {
           </span>
         </div>
       </div>
-
-      {/* ACTIONS */}
       <div className="relative z-10 flex items-center gap-3 mt-8">
-        
         <button
+          onClick={handleChat}
           className="
             flex-1
             flex
@@ -141,11 +138,10 @@ const PDFCard = ({ pdf }) => {
           "
         >
           <MessageSquare className="w-5 h-5" />
-
           Chat
         </button>
-
         <button
+          onClick={handleView}
           className="
             p-3
             rounded-2xl
@@ -157,8 +153,8 @@ const PDFCard = ({ pdf }) => {
         >
           <Eye className="text-white w-5 h-5" />
         </button>
-
         <button
+          onClick={handleDelete}
           className="
             p-3
             rounded-2xl
@@ -174,5 +170,4 @@ const PDFCard = ({ pdf }) => {
     </motion.div>
   )
 }
-
 export default PDFCard

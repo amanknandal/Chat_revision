@@ -1,20 +1,20 @@
-import { motion, AnimatePresence } from "framer-motion"
-
+import { motion,AnimatePresence } from "framer-motion"
 import { X } from "lucide-react"
 
-const Modal = ({
+const Modal=({
   isOpen,
   onClose,
   title,
   children,
-}) => {
-  return (
+})=>{
+  return(
     <AnimatePresence>
       {isOpen && (
         <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          exit={{ opacity: 0 }}
+          initial={{ opacity:0 }}
+          animate={{ opacity:1 }}
+          exit={{ opacity:0 }}
+          onClick={onClose}
           className="
             fixed
             inset-0
@@ -27,12 +27,12 @@ const Modal = ({
             p-4
           "
         >
-          {/* MODAL */}
           <motion.div
-            initial={{ scale: 0.9, opacity: 0 }}
-            animate={{ scale: 1, opacity: 1 }}
-            exit={{ scale: 0.9, opacity: 0 }}
-            transition={{ duration: 0.2 }}
+            initial={{ scale:0.9,opacity:0 }}
+            animate={{ scale:1,opacity:1 }}
+            exit={{ scale:0.9,opacity:0 }}
+            transition={{ duration:0.2 }}
+            onClick={(e)=>e.stopPropagation()}
             className="
               relative
               w-full
@@ -45,7 +45,6 @@ const Modal = ({
               overflow-hidden
             "
           >
-            {/* HEADER */}
             <div
               className="
                 flex
@@ -76,7 +75,6 @@ const Modal = ({
               </button>
             </div>
 
-            {/* BODY */}
             <div className="p-6">
               {children}
             </div>

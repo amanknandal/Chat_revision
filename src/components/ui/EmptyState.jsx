@@ -1,16 +1,16 @@
 import { motion } from "framer-motion"
 
-const EmptyState = ({
-  icon: Icon,
+const EmptyState=({
+  icon:Icon,
   title,
   description,
   buttonText,
   onClick,
-}) => {
-  return (
+})=>{
+  return(
     <motion.div
-      initial={{ opacity: 0, y: 25 }}
-      animate={{ opacity: 1, y: 0 }}
+      initial={{ opacity:0,y:25 }}
+      animate={{ opacity:1,y:0 }}
       className="
         flex
         flex-col
@@ -21,7 +21,6 @@ const EmptyState = ({
         px-6
       "
     >
-      {/* ICON */}
       <div
         className="
           w-28
@@ -41,12 +40,10 @@ const EmptyState = ({
         )}
       </div>
 
-      {/* TITLE */}
       <h2 className="text-white text-3xl font-bold mt-8">
         {title}
       </h2>
 
-      {/* DESCRIPTION */}
       <p
         className="
           text-gray-400
@@ -59,7 +56,6 @@ const EmptyState = ({
         {description}
       </p>
 
-      {/* BUTTON */}
       {buttonText && (
         <button
           onClick={onClick}
@@ -85,5 +81,4 @@ const EmptyState = ({
     </motion.div>
   )
 }
-
 export default EmptyState

@@ -1,5 +1,4 @@
-import { motion, AnimatePresence } from "framer-motion"
-
+import { motion,AnimatePresence } from "framer-motion"
 import {
   CheckCircle2,
   AlertCircle,
@@ -7,50 +6,50 @@ import {
   X,
 } from "lucide-react"
 
-const Toast = ({
+const Toast=({
   show,
-  type = "success",
+  type="success",
   title,
   message,
   onClose,
-}) => {
-  const icons = {
-    success: CheckCircle2,
-    error: AlertCircle,
-    info: Info,
+})=>{
+  const icons={
+    success:CheckCircle2,
+    error:AlertCircle,
+    info:Info,
   }
 
-  const styles = {
-    success: `
+  const styles={
+    success:`
       border-green-400/20
       bg-green-500/10
     `,
-    error: `
+    error:`
       border-red-400/20
       bg-red-500/10
     `,
-    info: `
+    info:`
       border-blue-400/20
       bg-blue-500/10
     `,
   }
 
-  const iconColors = {
-    success: "text-green-400",
-    error: "text-red-400",
-    info: "text-blue-400",
+  const iconColors={
+    success:"text-green-400",
+    error:"text-red-400",
+    info:"text-blue-400",
   }
 
-  const Icon = icons[type]
+  const Icon=icons[type]
 
-  return (
+  return(
     <AnimatePresence>
       {show && (
         <motion.div
-          initial={{ opacity: 0, y: -30 }}
-          animate={{ opacity: 1, y: 0 }}
-          exit={{ opacity: 0, y: -30 }}
-          transition={{ duration: 0.25 }}
+          initial={{ opacity:0,y:-30 }}
+          animate={{ opacity:1,y:0 }}
+          exit={{ opacity:0,y:-30 }}
+          transition={{ duration:0.25 }}
           className="
             fixed
             top-6
@@ -73,7 +72,6 @@ const Toast = ({
               ${styles[type]}
             `}
           >
-            {/* ICON */}
             <div
               className="
                 w-12
@@ -94,7 +92,6 @@ const Toast = ({
               />
             </div>
 
-            {/* TEXT */}
             <div className="flex-1">
               <h3 className="text-white font-bold text-lg">
                 {title}
@@ -105,7 +102,6 @@ const Toast = ({
               </p>
             </div>
 
-            {/* CLOSE */}
             <button
               onClick={onClose}
               className="

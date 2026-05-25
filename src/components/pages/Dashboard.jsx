@@ -1,9 +1,11 @@
+import { useEffect, useState } from "react"
+import axios from "axios"
 import Navbar from "../layout/Navbar"
 import Sidebar from "../layout/Sidebar"
+import MobileSidebar from "../layout/MobileSidebar"
 import WelcomeCard from "../dashboard/WelcomeCard"
 import StatsCard from "../dashboard/StatsCard"
 import FeatureGrid from "../dashboard/FeatureGrid"
-
 import {
   FileText,
   Brain,
@@ -11,27 +13,65 @@ import {
   Sparkles,
 } from "lucide-react"
 
+const API_BASE_URL = import.meta.env.VITE_API_URL
+
 const Dashboard = () => {
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false)
+  const [stats, setStats] = useState({
+    pdfs: 0,
+    chats: 0,
+    flashcards: 0,
+    insights: 0,
+  })
+
+  useEffect(() => {
+    fetchDashboardStats()
+  }, [])
+
+  const fetchDashboardStats = async () => {
+    try {
+      const token = localStorage.getItem("token")
+
+      const response = await axios.get(
+        `${API_BASE_URL}/dashboard/stats`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      )
+
+      setStats({
+        pdfs: response.data.pdfs || 0,
+        chats: response.data.chats || 0,
+        flashcards: response.data.flashcards || 0,
+        insights: response.data.insights || 0,
+      })
+    }
+    catch (error) {
+      console.log(error)
+    }
+  }
+
   return (
     <div className="flex bg-[#0B1120] min-h-screen">
-      
-      {/* SIDEBAR */}
       <Sidebar />
 
-      {/* MAIN */}
-      <div className="flex-1">
-        <Navbar />
+      <MobileSidebar
+        isOpen={isSidebarOpen}
+        setIsOpen={setIsSidebarOpen}
+      />
 
-        <div className="p-6 space-y-8">
-          
-          {/* WELCOME */}
+      <div className="flex-1 min-w-0">
+        <Navbar toggleSidebar={() => setIsSidebarOpen(true)} />
+
+        <div className="p-4 md:p-6 space-y-8">
           <WelcomeCard />
 
-          {/* STATS */}
           <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-6">
             <StatsCard
               title="PDFs Uploaded"
-              value="24"
+              value={stats.pdfs}
               icon={FileText}
               color="bg-purple-500"
               increase="12"
@@ -39,7 +79,7 @@ const Dashboard = () => {
 
             <StatsCard
               title="AI Chats"
-              value="148"
+              value={stats.chats}
               icon={MessageSquareText}
               color="bg-blue-500"
               increase="18"
@@ -47,7 +87,7 @@ const Dashboard = () => {
 
             <StatsCard
               title="Flashcards"
-              value="320"
+              value={stats.flashcards}
               icon={Brain}
               color="bg-pink-500"
               increase="22"
@@ -55,14 +95,13 @@ const Dashboard = () => {
 
             <StatsCard
               title="AI Insights"
-              value="89"
+              value={stats.insights}
               icon={Sparkles}
               color="bg-yellow-500"
               increase="9"
             />
           </div>
 
-          {/* FEATURES */}
           <FeatureGrid />
         </div>
       </div>

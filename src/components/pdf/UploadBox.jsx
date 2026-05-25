@@ -1,40 +1,44 @@
 import { motion } from "framer-motion"
-import { UploadCloud, FileText } from "lucide-react"
+import { UploadCloud, FileText, Loader2 } from "lucide-react"
 import { useRef, useState } from "react"
-import { uploadPDF } from "../../services/api"
-
+import axios from "axios"
 const UploadBox = () => {
   const fileInputRef = useRef(null)
   const [fileName, setFileName] = useState("")
-  const [uploading, setUploading] = useState(false)
-  const [message, setMessage] = useState("")
-
+  const [loading, setLoading] = useState(false)
+  const [success, setSuccess] = useState("")
+  const [error, setError] = useState("")
   const handleFileChange = async (e) => {
     const file = e.target.files[0]
-
     if (!file) return
-
     setFileName(file.name)
-    setUploading(true)
-    setMessage("")
-
+    setLoading(true)
+    setError("")
+    setSuccess("")
     try {
-      const data = await uploadPDF(file)
-      if (data.session_id) {
-        localStorage.setItem("session_id", data.session_id)
-        setMessage("PDF uploaded successfully. You can now chat with it.")
-      } else {
-        setMessage("Upload succeeded, but no session was returned.")
-      }
-    } catch (err) {
-      setMessage(
-        err?.response?.data?.error ||
-        "Failed to upload PDF. Check your login and try again."
+      const token = localStorage.getItem("token")
+      const formData = new FormData()
+      formData.append("pdf", file)
+      await axios.post(
+        `${import.meta.env.VITE_API_URL}/pdf/upload`,
+        formData,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "multipart/form-data",
+          },
+        }
       )
+      setSuccess("PDF uploaded successfully")
+    } catch (err) {
+      setError(
+        err?.response?.data?.message ||
+          "Failed to upload PDF"
+      )
+    } finally {
+      setLoading(false)
     }
-    setUploading(false)
   }
-
   return (
     <motion.div
       initial={{ opacity: 0, y: 30 }}
@@ -54,7 +58,6 @@ const UploadBox = () => {
         shadow-xl
       "
     >
-      {/* GLOW */}
       <div
         className="
           absolute
@@ -67,11 +70,7 @@ const UploadBox = () => {
           blur-3xl
         "
       />
-
-      {/* CONTENT */}
       <div className="relative z-10">
-
-        {/* ICON */}
         <div
           className="
             mx-auto
@@ -89,19 +88,15 @@ const UploadBox = () => {
         >
           <UploadCloud className="text-white w-12 h-12" />
         </div>
-
-        {/* TEXT */}
         <h2 className="text-white text-3xl font-bold mt-6">
           Upload Your PDF
         </h2>
-
         <p className="text-gray-400 mt-3 max-w-lg mx-auto">
           Drag and drop your study materials or click below
           to upload PDFs for AI-powered learning.
         </p>
-
-        {/* BUTTON */}
         <button
+          disabled={loading}
           onClick={() => fileInputRef.current.click()}
           className="
             mt-8
@@ -117,12 +112,11 @@ const UploadBox = () => {
             transition-all
             duration-300
             shadow-lg
+            disabled:opacity-50
           "
         >
-          Choose PDF
+          {loading ? "Uploading..." : "Choose PDF"}
         </button>
-
-        {/* INPUT */}
         <input
           type="file"
           accept=".pdf"
@@ -130,25 +124,6 @@ const UploadBox = () => {
           onChange={handleFileChange}
           className="hidden"
         />
-
-        {uploading && (
-          <p className="mt-4 text-sm text-blue-200">
-            Uploading {fileName || "your PDF"}...
-          </p>
-        )}
-
-        {message && (
-          <p
-            className={`mt-4 text-sm ${message.includes("Failed")
-                ? "text-red-400"
-                : "text-green-300"
-              }`}
-          >
-            {message}
-          </p>
-        )}
-
-        {/* FILE PREVIEW */}
         {fileName && (
           <motion.div
             initial={{ opacity: 0 }}
@@ -182,23 +157,59 @@ const UploadBox = () => {
                 justify-center
               "
             >
-              <FileText className="text-white w-7 h-7" />
+              {loading ? (
+                <Loader2 className="text-white w-7 h-7 animate-spin" />
+              ) : (
+                <FileText className="text-white w-7 h-7" />
+              )}
             </div>
-
             <div className="text-left">
               <h3 className="text-white font-semibold">
                 {fileName}
               </h3>
 
               <p className="text-gray-400 text-sm">
-                Ready for AI processing
+                {loading
+                  ? "Uploading PDF..."
+                  : "Ready for AI processing"}
               </p>
             </div>
           </motion.div>
+        )}
+        {success && (
+          <div
+            className="
+              mt-6
+              bg-green-500/20
+              border
+              border-green-500/30
+              text-green-300
+              px-4
+              py-3
+              rounded-2xl
+            "
+          >
+            {success}
+          </div>
+        )}
+        {error && (
+          <div
+            className="
+              mt-6
+              bg-red-500/20
+              border
+              border-red-500/30
+              text-red-300
+              px-4
+              py-3
+              rounded-2xl
+            "
+          >
+            {error}
+          </div>
         )}
       </div>
     </motion.div>
   )
 }
-
 export default UploadBox

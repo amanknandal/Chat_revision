@@ -1,16 +1,16 @@
-import { Search, X } from "lucide-react"
+import { Search,X } from "lucide-react"
 import { motion } from "framer-motion"
 
-const SearchBar = ({
+const SearchBar=({
   value,
   onChange,
-  placeholder = "Search...",
+  placeholder="Search...",
   onClear,
-}) => {
-  return (
+})=>{
+  return(
     <motion.div
-      initial={{ opacity: 0, y: 15 }}
-      animate={{ opacity: 1, y: 0 }}
+      initial={{ opacity:0,y:15 }}
+      animate={{ opacity:1,y:0 }}
       className="
         flex
         items-center
@@ -28,10 +28,8 @@ const SearchBar = ({
         duration-300
       "
     >
-      {/* SEARCH ICON */}
       <Search className="text-gray-400 w-5 h-5" />
 
-      {/* INPUT */}
       <input
         type="text"
         value={value}
@@ -46,7 +44,6 @@ const SearchBar = ({
         "
       />
 
-      {/* CLEAR */}
       {value && (
         <button
           onClick={onClear}
