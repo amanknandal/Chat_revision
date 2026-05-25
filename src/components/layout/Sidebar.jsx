@@ -7,48 +7,51 @@ import {
   Settings,
   LogOut,
 } from "lucide-react"
+
 import { motion } from "framer-motion"
-import { useNavigate, useLocation } from "react-router-dom"
-const menuItems = [
+import { NavLink,useNavigate } from "react-router-dom"
+
+const menuItems=[
   {
-    title: "Dashboard",
-    icon: LayoutDashboard,
-    path: "/dashboard",
+    title:"Dashboard",
+    icon:LayoutDashboard,
+    path:"/",
   },
   {
-    title: "My PDFs",
-    icon: FileText,
-    path: "/upload",
+    title:"My PDFs",
+    icon:FileText,
+    path:"/upload",
   },
   {
-    title: "AI Chat",
-    icon: MessageSquare,
-    path: "/chat",
+    title:"AI Chat",
+    icon:MessageSquare,
+    path:"/chat",
   },
   {
-    title: "Flashcards",
-    icon: Brain,
-    path: "/flashcards",
+    title:"Flashcards",
+    icon:Brain,
+    path:"/flashcards",
   },
   {
-    title: "Revision Notes",
-    icon: BookOpen,
-    path: "/notes",
+    title:"Revision Notes",
+    icon:BookOpen,
+    path:"/revision-notes",
   },
 ]
-const Sidebar = () => {
-  const navigate = useNavigate()
-  const location = useLocation()
-  const handleLogout = () => {
+
+const Sidebar=()=>{
+  const navigate=useNavigate()
+
+  const handleLogout=()=>{
     localStorage.removeItem("token")
-    localStorage.removeItem("user")
     navigate("/login")
   }
-  return (
+
+  return(
     <motion.aside
-      initial={{ x: -80, opacity: 0 }}
-      animate={{ x: 0, opacity: 1 }}
-      transition={{ duration: 0.4 }}
+      initial={{ x:-80,opacity:0 }}
+      animate={{ x:0,opacity:1 }}
+      transition={{ duration:0.4 }}
       className="
         hidden
         lg:flex
@@ -84,26 +87,27 @@ const Sidebar = () => {
           >
             AI
           </div>
+
           <div>
             <h1 className="text-white text-lg font-bold">
               Study Assistant
             </h1>
+
             <p className="text-gray-400 text-xs">
               Smart Learning Platform
             </p>
           </div>
         </div>
+
         <div className="space-y-3">
-          {menuItems.map((item, index) => {
-            const Icon = item.icon
-            const active = location.pathname === item.path
-            return (
-              <button
+          {menuItems.map((item,index)=>{
+            const Icon=item.icon
+
+            return(
+              <NavLink
                 key={index}
-                onClick={() =>
-                  navigate(item.path)
-                }
-                className={`
+                to={item.path}
+                className={({ isActive })=>`
                   w-full
                   flex
                   items-center
@@ -115,7 +119,7 @@ const Sidebar = () => {
                   duration-300
                   group
                   ${
-                    active
+                    isActive
                       ? `
                         bg-gradient-to-r
                         from-purple-500
@@ -131,14 +135,16 @@ const Sidebar = () => {
                 `}
               >
                 <Icon className="w-5 h-5" />
+
                 <span className="font-medium">
                   {item.title}
                 </span>
-              </button>
+              </NavLink>
             )
           })}
         </div>
       </div>
+
       <div className="space-y-3">
         <button
           className="
@@ -157,10 +163,12 @@ const Sidebar = () => {
           "
         >
           <Settings className="w-5 h-5" />
+
           <span className="font-medium">
             Settings
           </span>
         </button>
+
         <button
           onClick={handleLogout}
           className="
@@ -178,6 +186,7 @@ const Sidebar = () => {
           "
         >
           <LogOut className="w-5 h-5" />
+
           <span className="font-medium">
             Logout
           </span>
@@ -186,4 +195,5 @@ const Sidebar = () => {
     </motion.aside>
   )
 }
+
 export default Sidebar
