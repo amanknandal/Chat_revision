@@ -3,7 +3,7 @@ import secrets
 class Config:
     SQLALCHEMY_DATABASE_URI = os.getenv(
         "DATABASE_URL",
-        "postgresql://postgres:password@localhost/aipdf"
+        "postgresql://postgres:123@localhost/aipdf"
     )
     SQLALCHEMY_TRACK_MODIFICATIONS = False
     JWT_SECRET_KEY = os.getenv(

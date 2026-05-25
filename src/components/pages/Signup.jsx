@@ -7,7 +7,7 @@ import Button from "../ui/Button"
 import axios from "axios"
 const Signup = () => {
   const navigate = useNavigate()
-  const [name, setName] = useState("")
+  const [username, setName] = useState("")
   const [phone, setPhone] = useState("")
   const [email, setEmail] = useState("")
   const [password, setPassword] = useState("")
@@ -18,9 +18,9 @@ const Signup = () => {
       setLoading(true)
       setError("")
       const response = await axios.post(
-        `${import.meta.env.VITE_API_URL}/auth/signup`,
+        `${import.meta.env.VITE_API_URL}/api/auth/signup`,
         {
-          name,
+          username,
           phone,
           email,
           password,
@@ -82,7 +82,7 @@ const Signup = () => {
             icon={User}
             label="Full Name"
             placeholder="Enter your name"
-            value={name}
+            value={username}
             onChange={(e) => setName(e.target.value)}
           />
           <Input
