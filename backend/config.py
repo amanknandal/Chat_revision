@@ -3,7 +3,7 @@ import secrets
 class Config:
     SQLALCHEMY_DATABASE_URI = os.getenv(
         "DATABASE_URL",
-        "postgresql://postgres:123@localhost/aipdf"
+        "postgresql://postgres:password@localhost/aipdf"
     )
     SQLALCHEMY_TRACK_MODIFICATIONS = False
     JWT_SECRET_KEY = os.getenv(
@@ -16,5 +16,5 @@ class Config:
     )
     OLLAMA_MODEL = os.getenv(
         "OLLAMA_MODEL",
-        "phi3:mini"
+        "qwen2.5:1.5b"
     )

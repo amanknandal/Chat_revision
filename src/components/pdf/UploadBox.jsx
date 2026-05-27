@@ -20,7 +20,7 @@ const UploadBox = () => {
       const formData = new FormData()
       formData.append("pdf", file)
       await axios.post(
-        `${import.meta.env.VITE_API_URL}/pdf/upload`,
+        `${import.meta.env.VITE_API_URL}/api/pdf/upload`,
         formData,
         {
           headers: {

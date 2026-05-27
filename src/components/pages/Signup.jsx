@@ -91,7 +91,7 @@ const Signup = () => {
             placeholder="Enter your phone number"
             value={phone}
             onChange={(e) => setPhone(e.target.value)}
-          />
+          />    
           <Input
             icon={Mail}
             label="Email"

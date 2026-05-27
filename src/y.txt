@@ -1,0 +1,10 @@
+{
+  "message": "Login successful",
+  "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJmcmVzaCI6ZmFsc2UsImlhdCI6MTc3OTc2OTE5MSwianRpIjoiNDMyYWM0NDAtMDNkOC00YzdmLWE4NTctMjdlOWQxYzM2NjFiIiwidHlwZSI6ImFjY2VzcyIsInN1YiI6IjIiLCJuYmYiOjE3Nzk3NjkxOTEsImNzcmYiOiI4MDRmZjRkNC1kMjQ3LTRkYTItYjIxZC0wMzY3NWJmZTQ2ODgiLCJleHAiOjE3Nzk3NzAwOTF9.izdBamRc58hkFRJ-4QGw5zguIKAerovoQ_jXqF1gxAA",
+  "user": {
+    "email": "test@gmail.com",
+    "id": 2,
+    "is_premium": false,
+    "username": "test"
+  }
+}

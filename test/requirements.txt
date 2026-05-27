@@ -1,0 +1,14 @@
+flask
+flask-cors
+flask-jwt-extended
+flask-sqlalchemy
+psycopg2-binary
+python-dotenv
+pymupdf
+sentence-transformers
+faiss-cpu
+requests
+gunicorn
+bcrypt
+apscheduler
+numpy

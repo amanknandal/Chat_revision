@@ -1,0 +1,643 @@
+db.py "from flask_sqlalchemy import SQLAlchemy
+db = SQLAlchemy()", pdf_sessions.py "from database.db import db
+from datetime import datetime
+from database.db import db
+from datetime import datetime
+class PDFSession(db.Model):
+    __tablename__ = "pdf_sessions"
+    id = db.Column(
+        db.Integer,
+        primary_key=True
+    )
+    user_id = db.Column(
+        db.Integer,
+        nullable=False
+    )
+    original_filename = db.Column(
+        db.String(255),
+        nullable=False
+    )
+    stored_filename = db.Column(
+        db.String(255),
+        nullable=False,
+        unique=True
+    )
+    vector_path = db.Column(
+        db.String(255),
+        nullable=False
+    )
+    expires_at = db.Column(
+        db.DateTime,
+        nullable=False
+    )
+    created_at = db.Column(
+        db.DateTime,
+        default=datetime.utcnow
+    )
+    def is_expired(self):
+        return datetime.utcnow() > self.expires_at
+    def to_dict(self):
+        return {
+            "id": self.id,
+            "original_filename": self.original_filename,
+            "stored_filename": self.stored_filename,
+            "vector_path": self.vector_path,
+            "expires_at": self.expires_at.isoformat()
+        }
+class PDFSession(db.Model):
+    __tablename__ = "pdf_sessions"
+    id = db.Column(
+        db.Integer,
+        primary_key=True
+    )
+    user_id = db.Column(
+        db.Integer,
+        nullable=False
+    )
+    original_filename = db.Column(
+        db.String(255),
+        nullable=False
+    )
+    stored_filename = db.Column(
+        db.String(255),
+        nullable=False,
+        unique=True
+    )
+    vector_path = db.Column(
+        db.String(255),
+        nullable=False
+    )
+    total_pages = db.Column(
+        db.Integer,
+        default=0
+    )
+    expires_at = db.Column(
+        db.DateTime,
+        nullable=False
+    )
+    created_at = db.Column(
+        db.DateTime,
+        default=datetime.utcnow
+    )
+    def is_expired(self):
+        return datetime.utcnow() > self.expires_at
+    def to_dict(self):
+        return {
+            "id": self.id,
+            "original_filename": self.original_filename,
+            "stored_filename": self.stored_filename,
+            "vector_path": self.vector_path,
+            "total_pages": self.total_pages,
+            "expires_at": self.expires_at.isoformat()
+        }", user.py "from database.db import db
+from datetime import datetime
+class User(db.Model):
+    __tablename__ = "users"
+    id = db.Column(
+        db.Integer,
+        primary_key=True
+    )
+    username = db.Column(
+        db.String(100),
+        nullable=False
+    )
+    email = db.Column(
+        db.String(150),
+        unique=True,
+        nullable=False
+    )
+    password = db.Column(
+        db.String(255),
+        nullable=False
+    )
+    is_premium = db.Column(
+        db.Boolean,
+        default=False
+    )
+    created_at = db.Column(
+        db.DateTime,
+        default=datetime.utcnow
+    )
+    def retention_hours(self):
+        return 10 if self.is_premium else 2
+    def to_dict(self):
+        return {
+            "id": self.id,
+            "username": self.username,
+            "email": self.email,
+            "is_premium": self.is_premium
+        }", auth_routes.py "from flask import Blueprint, request, jsonify
+from flask_jwt_extended import create_access_token
+from models.user import User
+from database.db import db
+import bcrypt
+auth_bp = Blueprint(
+    "auth",
+    __name__
+)
+@auth_bp.route("/signup", methods=["POST"])
+def signup():
+    try:
+        data = request.get_json()
+        username = data.get("username")
+        email = data.get("email")
+        password = data.get("password")
+        if not username or not email or not password:
+            return jsonify({
+                "error": "All fields are required"
+            }), 400
+        existing_user = User.query.filter_by(
+            email=email
+        ).first()
+        if existing_user:
+            return jsonify({
+                "error": "Email already exists"
+            }), 409
+        hashed_password = bcrypt.hashpw(
+            password.encode("utf-8"),
+            bcrypt.gensalt()
+        ).decode("utf-8")
+        user = User(
+            username=username,
+            email=email,
+            password=hashed_password
+        )
+        db.session.add(user)
+        db.session.commit()
+        token = create_access_token(
+            identity=str(user.id)
+        )
+        return jsonify({
+            "message": "Signup successful",
+            "token": token,
+            "user": user.to_dict()
+        }), 201
+    except Exception as e:
+        return jsonify({
+            "error": str(e)
+        }), 500
+@auth_bp.route("/login", methods=["POST"])
+def login():
+    try:
+        data = request.get_json()
+        email = data.get("email")
+        password = data.get("password")
+        user = User.query.filter_by(
+            email=email
+        ).first()
+        if not user:
+            return jsonify({
+                "error": "Invalid credentials"
+            }), 401
+        valid_password = bcrypt.checkpw(
+            password.encode("utf-8"),
+            user.password.encode("utf-8")
+        )
+        if not valid_password:
+            return jsonify({
+                "error": "Invalid credentials"
+            }), 401
+        token = create_access_token(
+            identity=str(user.id)
+        )
+        return jsonify({
+            "message": "Login successful",
+            "token": token,
+            "user": user.to_dict()
+        }), 200
+    except Exception as e:
+        return jsonify({
+            "error": str(e)
+        }), 500", chat_routes.py "from flask import Blueprint, request, jsonify
+from flask_jwt_extended import (
+    jwt_required,
+    get_jwt_identity
+)
+from models.user import User
+from models.pdf_session import PDFSession
+from utils.embeddings import embedding_model
+from utils.vector_store import search_vectors
+from utils.ollama_client import ask_ollama
+from datetime import datetime
+chat_bp = Blueprint(
+    "chat",
+    __name__
+)
+@chat_bp.route("/ask", methods=["POST"])
+@jwt_required()
+def ask_question():
+    try:
+        user_id = get_jwt_identity()
+        user = User.query.get(user_id)
+        if not user:
+            return jsonify({
+                "error": "User not found"
+            }), 404
+        data = request.get_json()
+        question = data.get("question")
+        session_id = data.get("session_id")
+        if not question:
+            return jsonify({
+                "error": "Question is required"
+            }), 400
+        if not session_id:
+            return jsonify({
+                "error": "Session ID is required"
+            }), 400
+        session = PDFSession.query.filter_by(
+            id=session_id,
+            user_id=user.id
+        ).first()
+        if not session:
+            return jsonify({
+                "error": "PDF session not found"
+            }), 404
+        if session.is_expired():
+            return jsonify({
+                "error": "PDF session expired"
+            }), 410
+        query_vector = embedding_model.encode(
+            [question]
+        )[0]
+        contexts = search_vectors(
+            query_vector,
+            session.vector_path,
+            k=5
+        )
+        context_text = "\n\n".join(contexts)
+        prompt = f'''
+You are an AI PDF assistant for students.
+Answer ONLY using the provided PDF context.
+If the answer does not exist in the PDF context,
+reply with:
+"I could not find this information in the uploaded PDF."
+PDF Context:
+{context_text}
+Question:
+{question}
+Answer:
+'''
+        answer = ask_ollama(prompt)
+        return jsonify({
+            "question": question,
+            "answer": answer,
+            "session_id": session.id,
+            "expires_at": session.expires_at.isoformat()
+        }), 200
+    except Exception as e:
+        return jsonify({
+            "error": str(e)
+        }), 500", upload_routes.py "from flask import Blueprint, request, jsonify
+from flask_jwt_extended import jwt_required, get_jwt_identity
+from werkzeug.utils import secure_filename
+from models.user import User
+from models.pdf_session import PDFSession
+from database.db import db
+from utils.pdf_loader import extract_text
+from utils.embeddings import create_embeddings
+from utils.vector_store import save_vectors
+from datetime import datetime, timedelta
+import uuid
+import os
+upload_bp = Blueprint(
+    "upload",
+    __name__
+)
+TEMP_UPLOAD_FOLDER = "temp_uploads"
+TEMP_VECTOR_FOLDER = "temp_vectors"
+os.makedirs(TEMP_UPLOAD_FOLDER, exist_ok=True)
+os.makedirs(TEMP_VECTOR_FOLDER, exist_ok=True)
+@upload_bp.route("/upload", methods=["POST"])
+@jwt_required()
+def upload_pdf():
+    try:
+        user_id = get_jwt_identity()
+        user = User.query.get(user_id)
+        if not user:
+            return jsonify({
+                "error": "User not found"
+            }), 404
+        if "file" not in request.files:
+            return jsonify({
+                "error": "No file uploaded"
+            }), 400
+        file = request.files["file"]
+        if file.filename == "":
+            return jsonify({
+                "error": "Empty filename"
+            }), 400
+        if not file.filename.lower().endswith(".pdf"):
+            return jsonify({
+                "error": "Only PDF files allowed"
+            }), 400
+        unique_id = str(uuid.uuid4())
+        safe_filename = secure_filename(
+            file.filename
+        )
+        stored_filename = f"{unique_id}_{safe_filename}"
+        pdf_path = os.path.join(
+            TEMP_UPLOAD_FOLDER,
+            stored_filename
+        )
+        file.save(pdf_path)
+        text = extract_text(pdf_path)
+        if not text.strip():
+            return jsonify({
+                "error": "Could not extract text from PDF"
+            }), 400
+        chunks = [
+            text[i:i + 500]
+            for i in range(0, len(text), 500)
+        ]
+        vectors = create_embeddings(chunks)
+        vector_path = os.path.join(
+            TEMP_VECTOR_FOLDER,
+            unique_id
+        )
+        save_vectors(
+            vectors,
+            chunks,
+            vector_path
+        )
+        expiry_hours = user.retention_hours()
+        expires_at = datetime.utcnow() + timedelta(
+            hours=expiry_hours
+        )
+        session = PDFSession(
+            user_id=user.id,
+            original_filename=safe_filename,
+            stored_filename=stored_filename,
+            vector_path=vector_path,
+            expires_at=expires_at
+        )
+        db.session.add(session)
+        db.session.commit()
+        return jsonify({
+            "message": "PDF uploaded successfully",
+            "session_id": session.id,
+            "expires_at": expires_at.isoformat(),
+            "retention_hours": expiry_hours
+        }), 201
+    except Exception as e:
+        return jsonify({
+            "error": str(e)
+        }), 500", cleanup.py "import os
+from datetime import datetime
+from models.pdf_session import PDFSession
+from database.db import db
+def cleanup_expired_sessions():
+    try:
+        expired_sessions = PDFSession.query.filter(
+            PDFSession.expires_at < datetime.utcnow()
+        ).all()
+        deleted_count = 0
+        for session in expired_sessions:
+            try:
+                pdf_path = os.path.join(
+                    "temp_uploads",
+                    session.stored_filename
+                )
+                vector_index = (
+                    f"{session.vector_path}.index"
+                )
+                vector_pickle = (
+                    f"{session.vector_path}.pkl"
+                )
+                if os.path.exists(pdf_path):
+                    os.remove(pdf_path)
+                if os.path.exists(vector_index):
+                    os.remove(vector_index)
+                if os.path.exists(vector_pickle):
+                    os.remove(vector_pickle)
+                db.session.delete(session)
+                deleted_count += 1
+            except Exception:
+                continue
+        db.session.commit()
+        return {
+            "deleted_sessions": deleted_count
+        }
+    except Exception as e:
+        db.session.rollback()
+        return {
+            "error": str(e)
+        }", embeddings.py "from sentence_transformers import SentenceTransformer
+embedding_model = SentenceTransformer(
+    "all-MiniLM-L6-v2"
+)
+def create_embeddings(text_chunks):
+    try:
+        embeddings = embedding_model.encode(
+            text_chunks,
+            convert_to_numpy=True
+        )
+        return embeddings
+    except Exception as e:
+        raise Exception(
+            f"Embedding creation failed: {str(e)}"
+        )",ollama_client.py "import requests
+import os
+OLLAMA_URL = os.getenv(
+    "OLLAMA_URL",
+    "http://127.0.0.1:11434/api/generate"
+)
+OLLAMA_MODEL = os.getenv(
+    "OLLAMA_MODEL",
+    "qwen2.5:1.5b"
+)
+def ask_ollama(prompt):
+    try:
+        payload = {
+            "model": OLLAMA_MODEL,
+            "prompt": prompt,
+            "stream": False
+        }
+        response = requests.post(
+            OLLAMA_URL,
+            json=payload,
+            timeout=120
+        )
+        if response.status_code != 200:
+            raise Exception(
+                f"Ollama API Error: {response.text}"
+            )
+        data = response.json()
+        return data.get(
+            "response",
+            "No response generated."
+        )
+    except requests.exceptions.Timeout:
+        raise Exception(
+            "Ollama request timed out"
+        )
+    except requests.exceptions.ConnectionError:
+        raise Exception(
+            "Could not connect to Ollama"
+        )
+    except Exception as e:
+        raise Exception(
+            f"Ollama generation failed: {str(e)}"
+        )", pdf_loader.py "import fitz
+def extract_text(pdf_path):
+    try:
+        document = fitz.open(pdf_path)
+        full_text = []
+        for page in document:
+            try:
+                text = page.get_text()
+                if text:
+                    full_text.append(text)
+            except Exception:
+                continue
+        document.close()
+        return "\n".join(full_text)
+    except Exception as e:
+        raise Exception(
+            f"PDF extraction failed: {str(e)}"
+        )", vector_store.py "import faiss
+import numpy as np
+import pickle
+def save_vectors(
+    vectors,
+    chunks,
+    vector_path
+):
+    try:
+        dimension = vectors.shape[1]
+        index = faiss.IndexFlatL2(
+            dimension
+        )
+        index.add(vectors)
+        faiss.write_index(
+            index,
+            f"{vector_path}.index"
+        )
+        with open(
+            f"{vector_path}.pkl",
+            "wb"
+        ) as file:
+            pickle.dump(
+                chunks,
+                file
+            )
+    except Exception as e:
+        raise Exception(
+            f"Vector saving failed: {str(e)}"
+        )
+def search_vectors(
+    query_vector,
+    vector_path,
+    k=5
+):
+    try:
+        index = faiss.read_index(
+            f"{vector_path}.index"
+        )
+        with open(
+            f"{vector_path}.pkl",
+            "rb"
+        ) as file:
+
+            chunks = pickle.load(file)
+        query_vector = np.array(
+            [query_vector],
+            dtype=np.float32
+        )
+        distances, indices = index.search(
+            query_vector,
+            k
+        )
+        results = []
+        for idx in indices[0]:
+            if idx < len(chunks):
+                results.append(
+                    chunks[idx]
+                )
+        return results
+    except Exception as e:
+        raise Exception(
+            f"Vector search failed: {str(e)}"
+        )", app.py "from flask import Flask
+from flask_cors import CORS
+from flask_jwt_extended import JWTManager
+from apscheduler.schedulers.background import (
+    BackgroundScheduler
+)
+from config import Config
+from database.db import db
+from routes.auth_routes import auth_bp
+from routes.upload_routes import upload_bp
+from routes.chat_routes import chat_bp
+from utils.cleanup import (
+    cleanup_expired_sessions
+)
+from models.user import User
+from models.pdf_session import PDFSession
+app = Flask(__name__)
+app.config.from_object(Config)
+CORS(
+    app,
+    resources={
+        r"/*": {
+            "origins": "*"
+        }
+    }
+)
+JWTManager(app)
+db.init_app(app)
+with app.app_context():
+    db.create_all()
+app.register_blueprint(
+    auth_bp,
+    url_prefix="/api/auth"
+)
+app.register_blueprint(
+    upload_bp,
+    url_prefix="/api/upload"
+)
+app.register_blueprint(
+    chat_bp,
+    url_prefix="/api/chat"
+)
+scheduler = BackgroundScheduler()
+scheduler.add_job(
+    func=cleanup_expired_sessions,
+    trigger="interval",
+    minutes=10
+)
+scheduler.start()
+@app.route("/")
+def home():
+    return {
+        "message": "AI PDF Assistant Backend Running"
+    }
+@app.route("/health")
+def health():
+    return {
+        "status": "healthy"
+    }
+if __name__ == "__main__":
+    app.run(
+        host="0.0.0.0",
+        port=5000,
+        debug=True
+    )", "import os
+import secrets
+class Config:
+    SQLALCHEMY_DATABASE_URI = os.getenv(
+        "DATABASE_URL",
+        "postgresql://postgres:password@localhost/aipdf"
+    )
+    SQLALCHEMY_TRACK_MODIFICATIONS = False
+    JWT_SECRET_KEY = os.getenv(
+        "JWT_SECRET_KEY",
+        secrets.token_hex(32)
+    )
+    OLLAMA_URL = os.getenv(
+        "OLLAMA_URL",
+        "http://127.0.0.1:11434/api/generate"
+    )
+    OLLAMA_MODEL = os.getenv(
+        "OLLAMA_MODEL",
+        "qwen2.5:1.5b"
+    )" 
