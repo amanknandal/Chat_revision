@@ -5,6 +5,9 @@ import Upload from "./components/pages/Upload"
 import PDFViewerPage from "./components/pages/PDFViewerPage"
 import Login from "./components/pages/Login"
 import Signup from "./components/pages/Signup"
+import Flashcards from "./components/pages/Flashcards"
+import RevisionNotes from "./components/pages/RevisionNotes"
+import Settings from "./components/pages/Settings"
 
 const App = () => {
   return (
@@ -13,6 +16,9 @@ const App = () => {
         <Route path="/" element={<Dashboard />} />
         <Route path="/chat" element={<Chat />} />
         <Route path="/upload" element={<Upload />} />
+        <Route path="/settings" element={<Settings />} />
+        <Route path="/flashcards" element={<Flashcards />} />
+        <Route path="/revision-notes" element={<RevisionNotes />} />
         <Route path="/pdf/:id" element={<PDFViewerPage />} />
         <Route path="/login" element={<Login />} />
         <Route path="/signup" element={<Signup />} />

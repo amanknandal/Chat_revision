@@ -9,49 +9,49 @@ import {
 } from "lucide-react"
 
 import { motion } from "framer-motion"
-import { NavLink,useNavigate } from "react-router-dom"
+import { NavLink, useNavigate } from "react-router-dom"
 
-const menuItems=[
+const menuItems = [
   {
-    title:"Dashboard",
-    icon:LayoutDashboard,
-    path:"/",
+    title: "Dashboard",
+    icon: LayoutDashboard,
+    path: "/",
   },
   {
-    title:"My PDFs",
-    icon:FileText,
-    path:"/upload",
+    title: "My PDFs",
+    icon: FileText,
+    path: "/upload",
   },
   {
-    title:"AI Chat",
-    icon:MessageSquare,
-    path:"/chat",
+    title: "AI Chat",
+    icon: MessageSquare,
+    path: "/chat",
   },
   {
-    title:"Flashcards",
-    icon:Brain,
-    path:"/flashcards",
+    title: "Flashcards",
+    icon: Brain,
+    path: "/flashcards",
   },
   {
-    title:"Revision Notes",
-    icon:BookOpen,
-    path:"/revision-notes",
+    title: "Revision Notes",
+    icon: BookOpen,
+    path: "/revision-notes",
   },
 ]
 
-const Sidebar=()=>{
-  const navigate=useNavigate()
+const Sidebar = () => {
+  const navigate = useNavigate()
 
-  const handleLogout=()=>{
+  const handleLogout = () => {
     localStorage.removeItem("token")
     navigate("/login")
   }
 
-  return(
+  return (
     <motion.aside
-      initial={{ x:-80,opacity:0 }}
-      animate={{ x:0,opacity:1 }}
-      transition={{ duration:0.4 }}
+      initial={{ x: -80, opacity: 0 }}
+      animate={{ x: 0, opacity: 1 }}
+      transition={{ duration: 0.4 }}
       className="
         hidden
         lg:flex
@@ -100,14 +100,14 @@ const Sidebar=()=>{
         </div>
 
         <div className="space-y-3">
-          {menuItems.map((item,index)=>{
-            const Icon=item.icon
+          {menuItems.map((item, index) => {
+            const Icon = item.icon
 
-            return(
+            return (
               <NavLink
                 key={index}
                 to={item.path}
-                className={({ isActive })=>`
+                className={({ isActive }) => `
                   w-full
                   flex
                   items-center
@@ -118,15 +118,14 @@ const Sidebar=()=>{
                   transition-all
                   duration-300
                   group
-                  ${
-                    isActive
-                      ? `
+                  ${isActive
+                    ? `
                         bg-gradient-to-r
                         from-purple-500
                         to-blue-500
                         text-white
                       `
-                      : `
+                    : `
                         text-gray-300
                         hover:text-white
                         hover:bg-white/10
@@ -147,20 +146,21 @@ const Sidebar=()=>{
 
       <div className="space-y-3">
         <button
+          onClick={() => navigate('/settings')}
           className="
-            w-full
-            flex
-            items-center
-            gap-4
-            px-4
-            py-3
-            rounded-2xl
-            text-gray-300
-            hover:text-white
-            hover:bg-white/10
-            transition-all
-            duration-300
-          "
+                w-full
+                flex
+                items-center
+                gap-4
+                px-4
+                py-3
+                rounded-2xl
+                text-gray-300
+                hover:text-white
+                hover:bg-white/10
+                transition-all
+                duration-300
+              "
         >
           <Settings className="w-5 h-5" />
 

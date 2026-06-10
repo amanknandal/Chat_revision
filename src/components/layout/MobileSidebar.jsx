@@ -9,26 +9,33 @@ import {
   X,
 } from "lucide-react"
 import { motion, AnimatePresence } from "framer-motion"
+import { NavLink } from "react-router-dom"
+
 const menuItems = [
   {
     title: "Dashboard",
     icon: LayoutDashboard,
+    path: "/",
   },
   {
     title: "My PDFs",
     icon: FileText,
+    path: "/upload",
   },
   {
     title: "AI Chat",
     icon: MessageSquare,
+    path: "/chat",
   },
   {
     title: "Flashcards",
     icon: Brain,
+    path: "/flashcards",
   },
   {
     title: "Revision Notes",
     icon: BookOpen,
+    path: "/revision-notes",
   },
 ]
 const MobileSidebar = ({ isOpen, setIsOpen }) => {
@@ -50,7 +57,7 @@ const MobileSidebar = ({ isOpen, setIsOpen }) => {
               lg:hidden
             "
           />
-         <motion.div
+          <motion.div
             initial={{ x: -300 }}
             animate={{ x: 0 }}
             exit={{ x: -300 }}
@@ -118,9 +125,11 @@ const MobileSidebar = ({ isOpen, setIsOpen }) => {
                 {menuItems.map((item, index) => {
                   const Icon = item.icon
                   return (
-                    <button
+                    <NavLink
                       key={index}
-                      className="
+                      to={item.path}
+                      onClick={() => setIsOpen(false)}
+                      className={({ isActive }) => `
                         w-full
                         flex
                         items-center
@@ -128,24 +137,39 @@ const MobileSidebar = ({ isOpen, setIsOpen }) => {
                         px-4
                         py-3
                         rounded-2xl
-                        text-gray-300
-                        hover:text-white
-                        hover:bg-white/10
                         transition-all
                         duration-300
-                      "
+                        ${isActive
+                          ? `
+                              bg-gradient-to-r
+                              from-purple-500
+                              to-blue-500
+                              text-white
+                            `
+                          : `
+                              text-gray-300
+                              hover:text-white
+                              hover:bg-white/10
+                            `
+                        }
+                      `}
                     >
                       <Icon className="w-5 h-5" />
                       <span className="font-medium">
                         {item.title}
                       </span>
-                    </button>
+                    </NavLink>
                   )
                 })}
               </div>
             </div>
             <div className="space-y-3">
               <button
+                onClick={() => {
+                  setIsOpen(false)
+                  // navigate to settings
+                  window.location.href = '/Chat_revision/settings'
+                }}
                 className="
                   w-full
                   flex

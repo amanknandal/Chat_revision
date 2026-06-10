@@ -31,7 +31,8 @@ import Upload from "./components/pages/Upload"
 import PDFViewerPage from "./components/pages/PDFViewerPage"
 import Login from "./components/pages/Login"
 import Signup from "./components/pages/Signup"
-
+import Flashcards from "./components/pages/Flashcards"
+import RevisionNotes from "./components/pages/RevisionNotes"
 const ProtectedRoute = ({ children }) => {
   const token = localStorage.getItem("token")
   return token ? children : <Navigate to="/login" replace />
@@ -70,12 +71,28 @@ const App = () => {
             </ProtectedRoute>
           }
         />
+        <Route
+  path="/flashcards"
+  element={
+    <ProtectedRoute>
+      <Flashcards />
+    </ProtectedRoute>
+  }
+/>
 
         <Route
           path="/pdf-viewer"
           element={
             <ProtectedRoute>
               <PDFViewerPage />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/revision-notes"
+          element={
+            <ProtectedRoute>
+              <RevisionNotes />
             </ProtectedRoute>
           }
         />

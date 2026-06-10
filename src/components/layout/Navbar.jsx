@@ -1,16 +1,16 @@
 import { Menu, Bell, Search } from "lucide-react"
 import { motion } from "framer-motion"
 import { useNavigate } from "react-router-dom"
+import { useState } from "react"
+import NotificationsDropdown from "./NotificationsDropdown"
+
 const Navbar = ({ toggleSidebar }) => {
   const navigate = useNavigate()
-  const user =
-    JSON.parse(
-      localStorage.getItem("user")
-    ) || {}
+  const [showNotifications, setShowNotifications] = useState(false)
+  const user = JSON.parse(localStorage.getItem("user")) || {}
   const handleLogout = () => {
     localStorage.removeItem("token")
     localStorage.removeItem("user")
-
     navigate("/login")
   }
   return (
@@ -106,8 +106,9 @@ const Navbar = ({ toggleSidebar }) => {
           />
         </div>
       </div>
-      <div className="flex items-center gap-4">
+      <div className="flex items-center gap-4 relative">
         <button
+          onClick={() => setShowNotifications((s) => !s)}
           className="
             relative
             p-2
@@ -130,6 +131,9 @@ const Navbar = ({ toggleSidebar }) => {
             "
           />
         </button>
+        {showNotifications && (
+          <NotificationsDropdown onClose={() => setShowNotifications(false)} />
+        )}
         <div
           className="
             flex
