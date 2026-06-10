@@ -2,7 +2,7 @@ import axios from "axios"
 
 const API_URL = import.meta.env.VITE_API_URL || "http://localhost:5000"
 
-const api = axios.create({
+export const api = axios.create({
     baseURL: `${API_URL}/api`,
     headers: {
         "Content-Type": "application/json"
@@ -31,7 +31,7 @@ export const loginUser = async (payload) => {
 export const uploadPDF = async (file) => {
     const formData = new FormData()
     formData.append("file", file)
-    const { data } = await api.post("/upload/upload", formData, {
+    const { data } = await api.post("/upload/pdf", formData, {
         headers: {
             "Content-Type": "multipart/form-data"
         }

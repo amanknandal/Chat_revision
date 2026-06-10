@@ -31,7 +31,9 @@ const Signup = () => {
       navigate("/")
     } catch (err) {
       setError(
-        err?.response?.data?.message || "Signup failed"
+        err?.response?.data?.error ||
+        err?.response?.data?.message ||
+        "Signup failed"
       )
     } finally {
       setLoading(false)
@@ -91,7 +93,7 @@ const Signup = () => {
             placeholder="Enter your phone number"
             value={phone}
             onChange={(e) => setPhone(e.target.value)}
-          />    
+          />
           <Input
             icon={Mail}
             label="Email"

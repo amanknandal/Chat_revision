@@ -24,7 +24,7 @@
 
 // export default App
 
-import { BrowserRouter,Routes,Route,Navigate } from "react-router-dom"
+import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom"
 import Dashboard from "./components/pages/Dashboard"
 import Chat from "./components/pages/Chat"
 import Upload from "./components/pages/Upload"
@@ -32,13 +32,13 @@ import PDFViewerPage from "./components/pages/PDFViewerPage"
 import Login from "./components/pages/Login"
 import Signup from "./components/pages/Signup"
 
-const ProtectedRoute=({ children })=>{
-  const token=localStorage.getItem("token")
+const ProtectedRoute = ({ children }) => {
+  const token = localStorage.getItem("token")
   return token ? children : <Navigate to="/login" replace />
 }
 
-const App=()=>{
-  return(
+const App = () => {
+  return (
     <BrowserRouter>
       <Routes>
         <Route path="/login" element={<Login />} />
@@ -72,7 +72,7 @@ const App=()=>{
         />
 
         <Route
-          path="/pdf/:pdfId"
+          path="/pdf-viewer"
           element={
             <ProtectedRoute>
               <PDFViewerPage />

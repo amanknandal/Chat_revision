@@ -1,6 +1,5 @@
 import os
 import uuid
-import tempfile
 from datetime import datetime,timedelta
 from flask import Blueprint,request,jsonify
 from flask_jwt_extended import jwt_required,get_jwt_identity
@@ -36,14 +35,14 @@ def upload_pdf():
                 "error":"User not found"
             }),404
 
-        if "file" not in request.files:
+        if "file" not in request.files and "pdf" not in request.files:
             return jsonify({
                 "error":"PDF file required"
             }),400
 
-        file=request.files["file"]
+        file = request.files.get("file") or request.files.get("pdf")
 
-        if file.filename=="":
+        if not file or file.filename == "":
             return jsonify({
                 "error":"Invalid filename"
             }),400
@@ -59,12 +58,17 @@ def upload_pdf():
             file.filename
         )
 
-        temp_dir=tempfile.gettempdir()
-
-        pdf_path=os.path.join(
-            temp_dir,
-            f"{unique_id}.pdf"
+        uploads_dir = os.path.abspath(
+            os.path.join(
+                os.path.dirname(__file__),
+                "..",
+                "uploads"
+            )
         )
+        os.makedirs(uploads_dir, exist_ok=True)
+
+        stored_filename = f"{unique_id}_{safe_filename}"
+        pdf_path = os.path.join(uploads_dir, stored_filename)
 
         file.save(pdf_path)
 
@@ -123,7 +127,7 @@ def upload_pdf():
             hours=expiry_hours
         )
 
-        session=PDFSession(
+        session = PDFSession(
             user_id=user.id,
             original_filename=safe_filename,
             cloudinary_url="local_testing",
@@ -139,7 +143,8 @@ def upload_pdf():
 
         return jsonify({
             "message":"PDF uploaded successfully",
-            "session":session.to_dict()
+            "session": session.to_dict(),
+            "session_id": session.id
         }),201
 
     except Exception as e:

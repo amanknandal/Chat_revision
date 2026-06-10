@@ -8,7 +8,7 @@ const PDFList = () => {
     try {
       const token = localStorage.getItem("token")
       const response = await axios.get(
-        `${import.meta.env.VITE_API_URL}/pdf/all`,
+        `${import.meta.env.VITE_API_URL}/api/pdf/all`,
         {
           headers: {
             Authorization: `Bearer ${token}`,

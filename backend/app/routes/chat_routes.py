@@ -3,12 +3,13 @@ from flask_jwt_extended import (
     jwt_required,
     get_jwt_identity
 )
-from models.user import User
-from models.pdf_session import PDFSession
-from utils.embeddings import embedding_model
-from utils.vector_store import search_vectors
-from utils.ollama_client import ask_ollama
+from app.models.user import User
+from app.models.pdf_session import PDFSession
+from app.rag.embeddings import embedding_model
+from app.rag.vector_store import search_vectors
+from app.utils.ollama_client import ask_ollama
 from datetime import datetime
+
 chat_bp = Blueprint(
     "chat",
     __name__
@@ -50,11 +51,13 @@ def ask_question():
             [question]
         )[0]
         contexts = search_vectors(
+            session.collection_name,
             query_vector,
-            session.vector_path,
-            k=5
+            limit=5
         )
-        context_text = "\n\n".join(contexts)
+        context_text = "\n\n".join(
+            [item["text"] for item in contexts]
+        )
         prompt = f'''
 You are an AI PDF assistant for students.
 Answer ONLY using the provided PDF context.

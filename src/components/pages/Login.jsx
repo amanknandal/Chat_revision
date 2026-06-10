@@ -29,6 +29,7 @@ const Login = () => {
     }
     catch (error) {
       setError(
+        error.response?.data?.error ||
         error.response?.data?.message ||
         "Login failed"
       )

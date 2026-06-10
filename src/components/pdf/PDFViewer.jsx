@@ -16,7 +16,7 @@ const PDFViewer = ({ pdfId, pdfName }) => {
       try {
         const token = localStorage.getItem("token")
         const response = await axios.get(
-          `${import.meta.env.VITE_API_URL}/pdf/view/${pdfId}`,
+          `${import.meta.env.VITE_API_URL}/api/pdf/view/${pdfId}`,
           {
             headers: {
               Authorization: `Bearer ${token}`,

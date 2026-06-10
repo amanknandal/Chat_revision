@@ -1,3 +1,4 @@
+import { useEffect } from "react"
 import Navbar from "../layout/Navbar"
 import Sidebar from "../layout/Sidebar"
 import PDFViewer from "../pdf/PDFViewer"
@@ -7,6 +8,13 @@ const PDFViewerPage = () => {
   const [searchParams] = useSearchParams()
   const pdfId = searchParams.get("id")
   const pdfName = searchParams.get("name")
+
+  useEffect(() => {
+    if (pdfId) {
+      localStorage.setItem("session_id", pdfId)
+    }
+  }, [pdfId])
+
   return (
     <div className="flex bg-[#0B1120] min-h-screen">
       <Sidebar />

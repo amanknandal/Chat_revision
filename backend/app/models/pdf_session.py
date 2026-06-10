@@ -43,12 +43,13 @@ class PDFSession(db.Model):
         return datetime.utcnow()>self.expires_at
     def to_dict(self):
         return {
-            "id":self.id,
-            "user_id":self.user_id,
-            "original_filename":self.original_filename,
-            "cloudinary_url":self.cloudinary_url,
-            "collection_name":self.collection_name,
-            "total_pages":self.total_pages,
-            "expires_at":self.expires_at.isoformat(),
-            "created_at":self.created_at.isoformat()
+            "id": self.id,
+            "user_id": self.user_id,
+            "name": self.original_filename,
+            "original_filename": self.original_filename,
+            "cloudinary_url": self.cloudinary_url,
+            "collection_name": self.collection_name,
+            "total_pages": self.total_pages,
+            "expires_at": self.expires_at.isoformat(),
+            "created_at": self.created_at.isoformat()
         }

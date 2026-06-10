@@ -1,4 +1,5 @@
-import { useState } from "react"
+import { useEffect, useState } from "react"
+import { useSearchParams } from "react-router-dom"
 import Navbar from "../layout/Navbar"
 import Sidebar from "../layout/Sidebar"
 import MobileSidebar from "../layout/MobileSidebar"
@@ -6,6 +7,14 @@ import ChatBox from "../chat/ChatBox"
 
 const Chat = () => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false)
+  const [searchParams] = useSearchParams()
+
+  useEffect(() => {
+    const sessionId = searchParams.get("id")
+    if (sessionId) {
+      localStorage.setItem("session_id", sessionId)
+    }
+  }, [searchParams])
 
   return (
     <div className="flex bg-[#0B1120] min-h-screen">

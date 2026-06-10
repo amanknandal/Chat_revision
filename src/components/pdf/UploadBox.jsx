@@ -18,9 +18,9 @@ const UploadBox = () => {
     try {
       const token = localStorage.getItem("token")
       const formData = new FormData()
-      formData.append("pdf", file)
-      await axios.post(
-        `${import.meta.env.VITE_API_URL}/api/pdf/upload`,
+      formData.append("file", file)
+      const response = await axios.post(
+        `${import.meta.env.VITE_API_URL}/api/upload/pdf`,
         formData,
         {
           headers: {
@@ -29,11 +29,14 @@ const UploadBox = () => {
           },
         }
       )
+      if (response?.data?.session_id) {
+        localStorage.setItem("session_id", response.data.session_id)
+      }
       setSuccess("PDF uploaded successfully")
     } catch (err) {
       setError(
         err?.response?.data?.message ||
-          "Failed to upload PDF"
+        "Failed to upload PDF"
       )
     } finally {
       setLoading(false)
