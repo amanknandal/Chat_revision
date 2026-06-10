@@ -1,20 +1,12 @@
 import { motion } from "framer-motion"
 import { FileText, CalendarDays, Trash2, Eye, MessageSquare, } from "lucide-react"
 import { useNavigate } from "react-router-dom"
-import axios from "axios"
+import { api } from "../../services/api"
 const PDFCard = ({ pdf, refreshPDFs }) => {
   const navigate = useNavigate()
   const handleDelete = async () => {
     try {
-      const token = localStorage.getItem("token")
-      await axios.delete(
-        `${import.meta.env.VITE_API_URL}/api/pdf/delete/${pdf.id}`,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      )
+      await api.delete(`/pdf/delete/${pdf.id}`)
       refreshPDFs()
     } catch (error) {
       console.log(error)

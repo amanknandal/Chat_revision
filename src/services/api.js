@@ -33,7 +33,7 @@ export const uploadPDF = async (file) => {
     formData.append("file", file)
     const { data } = await api.post("/upload/pdf", formData, {
         headers: {
-            "Content-Type": "multipart/form-data"
+            "Content-Type": undefined
         }
     })
     return data

@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react"
-import axios from "axios"
+import { api } from "../../services/api"
 import Navbar from "../layout/Navbar"
 import Sidebar from "../layout/Sidebar"
 import MobileSidebar from "../layout/MobileSidebar"
@@ -12,8 +12,6 @@ import {
   MessageSquareText,
   Sparkles,
 } from "lucide-react"
-
-const API_BASE_URL = import.meta.env.VITE_API_URL
 
 const Dashboard = () => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false)
@@ -30,25 +28,14 @@ const Dashboard = () => {
 
   const fetchDashboardStats = async () => {
     try {
-      const token = localStorage.getItem("token")
-
-      const response = await axios.get(
-        `${API_BASE_URL}/dashboard/stats`,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      )
-
+      const { data } = await api.get("/dashboard/stats")
       setStats({
-        pdfs: response.data.pdfs || 0,
-        chats: response.data.chats || 0,
-        flashcards: response.data.flashcards || 0,
-        insights: response.data.insights || 0,
+        pdfs: data.pdfs || 0,
+        chats: data.chats || 0,
+        flashcards: data.flashcards || 0,
+        insights: data.insights || 0,
       })
-    }
-    catch (error) {
+    } catch (error) {
       console.log(error)
     }
   }

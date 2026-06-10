@@ -1,7 +1,7 @@
 import { motion } from "framer-motion"
 import { UploadCloud, FileText, Loader2 } from "lucide-react"
 import { useRef, useState } from "react"
-import axios from "axios"
+import { uploadPDF } from "../../services/api"
 const UploadBox = () => {
   const fileInputRef = useRef(null)
   const [fileName, setFileName] = useState("")
@@ -16,26 +16,14 @@ const UploadBox = () => {
     setError("")
     setSuccess("")
     try {
-      const token = localStorage.getItem("token")
-      const formData = new FormData()
-      formData.append("file", file)
-      const response = await axios.post(
-        `${import.meta.env.VITE_API_URL}/api/upload/pdf`,
-        formData,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-            "Content-Type": "multipart/form-data",
-          },
-        }
-      )
-      if (response?.data?.session_id) {
-        localStorage.setItem("session_id", response.data.session_id)
+      const data = await uploadPDF(file)
+      if (data?.session_id) {
+        localStorage.setItem("session_id", data.session_id)
       }
       setSuccess("PDF uploaded successfully")
     } catch (err) {
       setError(
-        err?.response?.data?.message ||
+        err?.response?.data?.error ||
         "Failed to upload PDF"
       )
     } finally {

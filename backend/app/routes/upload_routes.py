@@ -1,5 +1,7 @@
 import os
 import uuid
+import tempfile
+import shutil
 from datetime import datetime,timedelta
 from flask import Blueprint,request,jsonify
 from flask_jwt_extended import jwt_required,get_jwt_identity
@@ -53,10 +55,7 @@ def upload_pdf():
             }),400
 
         unique_id=str(uuid.uuid4())
-
-        safe_filename=secure_filename(
-            file.filename
-        )
+        safe_filename=secure_filename(file.filename)
 
         uploads_dir = os.path.abspath(
             os.path.join(
@@ -70,76 +69,74 @@ def upload_pdf():
         stored_filename = f"{unique_id}_{safe_filename}"
         pdf_path = os.path.join(uploads_dir, stored_filename)
 
-        file.save(pdf_path)
-
-        pages=extract_pdf_text(pdf_path)
-
-        if len(pages)==0:
-            pages=extract_ocr_text(pdf_path)
-
-        if len(pages)==0:
-            return jsonify({
-                "error":"No readable text found"
-            }),400
-
-        splitter=RecursiveCharacterTextSplitter(
-            chunk_size=1000,
-            chunk_overlap=200
+        temp_file=tempfile.NamedTemporaryFile(
+            suffix=".pdf",
+            delete=False
         )
+        temp_path=temp_file.name
+        temp_file.close()
 
-        chunks=[]
-        metadata=[]
+        try:
+            file.save(temp_path)
 
-        for page in pages:
-            split_chunks=splitter.split_text(
-                page["text"]
+            pages=extract_pdf_text(temp_path)
+            if len(pages)==0:
+                pages=extract_ocr_text(temp_path)
+
+            if len(pages)==0:
+                return jsonify({
+                    "error":"No readable text found"
+                }),400
+
+            splitter=RecursiveCharacterTextSplitter(
+                chunk_size=1000,
+                chunk_overlap=200
             )
 
-            for chunk in split_chunks:
-                chunks.append(chunk)
+            chunks=[]
+            metadata=[]
 
-                metadata.append({
-                    "page":page["page"],
-                    "source":safe_filename,
-                    "user_id":user.id
-                })
+            for page in pages:
+                split_chunks=splitter.split_text(page["text"])
+                for chunk in split_chunks:
+                    chunks.append(chunk)
+                    metadata.append({
+                        "page":page["page"],
+                        "source":safe_filename,
+                        "user_id":user.id
+                    })
 
-        embeddings=create_embeddings(
-            chunks
-        )
+            embeddings=create_embeddings(chunks)
+            collection_name=f"user_{user.id}_{unique_id}"
+            create_collection(collection_name)
+            store_vectors(collection_name, embeddings, chunks, metadata)
 
-        collection_name=f"user_{user.id}_{unique_id}"
+            expiry_hours=user.retention_hours()
+            expires_at=datetime.utcnow()+timedelta(hours=expiry_hours)
 
-        create_collection(
-            collection_name
-        )
+            shutil.copy(temp_path, pdf_path)
 
-        store_vectors(
-            collection_name,
-            embeddings,
-            chunks,
-            metadata
-        )
+            session = PDFSession(
+                user_id=user.id,
+                original_filename=safe_filename,
+                cloudinary_url="local_testing",
+                public_id=unique_id,
+                collection_name=collection_name,
+                total_pages=len(pages),
+                expires_at=expires_at
+            )
 
-        expiry_hours=user.retention_hours()
+            db.session.add(session)
+            db.session.commit()
 
-        expires_at=datetime.utcnow()+timedelta(
-            hours=expiry_hours
-        )
-
-        session = PDFSession(
-            user_id=user.id,
-            original_filename=safe_filename,
-            cloudinary_url="local_testing",
-            public_id=unique_id,
-            collection_name=collection_name,
-            total_pages=len(pages),
-            expires_at=expires_at
-        )
-
-        db.session.add(session)
-
-        db.session.commit()
+        except Exception:
+            db.session.rollback()
+            if os.path.exists(pdf_path):
+                os.remove(pdf_path)
+            raise
+        finally:
+            if os.path.exists(temp_path):
+                os.unlink(temp_path)
 
         return jsonify({
             "message":"PDF uploaded successfully",

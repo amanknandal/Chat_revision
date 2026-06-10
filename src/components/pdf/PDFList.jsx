@@ -1,21 +1,13 @@
 import { useEffect, useState } from "react"
 import PDFCard from "./PDFCard"
-import axios from "axios"
+import { api } from "../../services/api"
 const PDFList = () => {
   const [pdfs, setPdfs] = useState([])
   const [loading, setLoading] = useState(true)
   const fetchPDFs = async () => {
     try {
-      const token = localStorage.getItem("token")
-      const response = await axios.get(
-        `${import.meta.env.VITE_API_URL}/api/pdf/all`,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      )
-      setPdfs(response.data.pdfs || [])
+      const { data } = await api.get("/pdf/all")
+      setPdfs(data.pdfs || [])
     } catch (error) {
       console.log(error)
     } finally {

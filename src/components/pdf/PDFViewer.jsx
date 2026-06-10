@@ -7,23 +7,15 @@ import {
   ZoomOut,
   Download,
 } from "lucide-react"
-import axios from "axios"
+import { api } from "../../services/api"
 const PDFViewer = ({ pdfId, pdfName }) => {
   const [pdfUrl, setPdfUrl] = useState("")
   const [scale, setScale] = useState(1)
   useEffect(() => {
     const fetchPDF = async () => {
       try {
-        const token = localStorage.getItem("token")
-        const response = await axios.get(
-          `${import.meta.env.VITE_API_URL}/api/pdf/view/${pdfId}`,
-          {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-          }
-        )
-        setPdfUrl(response.data.url)
+        const { data } = await api.get(`/pdf/view/${pdfId}`)
+        setPdfUrl(data.url)
       } catch (error) {
         console.log(error)
       }
